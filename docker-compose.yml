@@ -15,6 +15,8 @@ services:
       - ./config/initializers/recaptcha.rb:/usr/src/app/config/initializers/recaptcha.rb
       - ./config/initializers/wicked_pdf.rb:/usr/src/app/config/initializers/wicked_pdf.rb
       - ./db/seeds.rb:/usr/src/app/db/seeds.rb
+      #- ./../roadmap-branding/dmpmelbourne/app/views/branded:/usr/src/app/app/views/branded
+      - ./db_backups/:/tmp/dat/
     ports:
       - "3000:3000"
     env_file:
@@ -40,5 +42,3 @@ services:
 volumes:
   db_volume:
   client_volume:
-
-
