@@ -14,10 +14,10 @@ WORKDIR /usr/src/app
 
 COPY ./roadmap/Gemfile* ./
 
-RUN bundle install --without mysql
+RUN bundle install --with pgsql puma
 
 VOLUME /usr/src/app
 
 EXPOSE 3000
 
-CMD bundle install --without mysql; rake db:migrate; bundle exec puma -C config/puma.rb
+CMD bundle install --with pgsql puma; rake db:migrate; bundle exec puma -C config/puma.rb
