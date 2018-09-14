@@ -1,0 +1,44 @@
+version: '3'
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: ./compose/dev/server/Dockerfile
+    image: roadmap/server
+    volumes:
+      - ./roadmap:/usr/src/app
+      - ./config/branding.yml:/usr/src/app/config/branding.yml
+      - ./config/database.yml:/usr/src/app/config/database.yml
+      - ./config/secrets.yml:/usr/src/app/config/secrets.yml
+      - ./config/initializers/contact_us.rb:/usr/src/app/config/initializers/contact_us.rb
+      - ./config/initializers/devise.rb:/usr/src/app/config/initializers/devise.rb
+      - ./config/initializers/recaptcha.rb:/usr/src/app/config/initializers/recaptcha.rb
+      - ./config/initializers/wicked_pdf.rb:/usr/src/app/config/initializers/wicked_pdf.rb
+      - ./db/seeds.rb:/usr/src/app/db/seeds.rb
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.envs/.dev/.env
+    depends_on:
+      - db
+  client:
+    build:
+      context: .
+      dockerfile: ./compose/dev/client/Dockerfile
+    image: roadmap/client
+    volumes:
+      - ./roadmap/lib/assets:/usr/src/app
+      - client_volume:/usr/src/app/node_modules
+      - ./roadmap/config:/usr/config
+      - ./roadmap/public:/usr/public
+  db:
+    image: postgres:9.5.5
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    env_file:
+      - ./.envs/.dev/.env
+volumes:
+  db_volume:
+  client_volume:
+
+

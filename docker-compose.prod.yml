@@ -1,0 +1,50 @@
+version: '3'
+services:
+  app:
+    build:
+      context: ./
+      # context: https://github.com/DMPRoadmap/roadmap.git
+      dockerfile: ./compose/prod/app/Dockerfile 
+    image: roadmap/prod-app
+    container_name: dmp_app
+    volumes:
+      - static_content:/opt/src/dmponline
+    env_file:
+      - ./.envs/.prod/.env
+    
+    depends_on:
+      - db
+  db:
+    image: postgres:9.5.5
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    env_file:
+      - ./.envs/.prod/.env
+      
+  web:
+    build:      
+      context: .      
+      dockerfile: ./compose/prod/apache/Dockerfile
+    image: roadmap/prod-web-apache
+    container_name: dmp_web
+    volumes:
+      - static_content:/opt/src/dmponline
+    env_file:
+      - ./.envs/.prod/.env
+    depends_on:
+      - app
+    ports:
+      - 80:80
+      - 2020:2020
+      - 2010:2010
+      - 3001:3001
+
+volumes:
+  db_volume:
+  static_content:
+  
+
+
+  
+
+
