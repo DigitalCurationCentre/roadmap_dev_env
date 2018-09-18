@@ -43,6 +43,8 @@ RUN envsubst < /tmp/puma/puma.rb > $RAILS_ROOT/config/puma.rb
 
 COPY ./roadmap-branding/${SERVICE_NAME}/app/views/branded app/views/branded
 
+# TODO:  Need to deal with translations
+
 RUN bundle install
 # RUN bundle install --jobs 20 --retry 5 --without development test 
 

@@ -31,6 +31,8 @@ ENV SRC_ROOT=/opt/src \
     DMP_DEV_SERVICE_NAME=dmponline_dev \
     DMP_DEV_SERVICE_PORT=3001 
 
+ENV RAILS_ROOT=${SRC_ROOT}/${DMP_SERVICE_NAME}
+
 # Log directories (have to specify bash explicitly rather than default /bin/sh)
 RUN bash -c 'mkdir -p $BASE_LOG_DIR/{$DMP_SERVICE_NAME,$DMP_MELBOURNE_SERVICE_NAME,${DMP_TUULI_SERVICE_NAME},${DMP_DEV_SERVICE_NAME}}'
 
