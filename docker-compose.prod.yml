@@ -8,7 +8,7 @@ services:
     image: roadmap/prod-app
     container_name: dmp_app
     volumes:
-      - static_content:/opt/src/dmponline
+      - app_sources:/opt/src
     env_file:
       - ./.envs/.prod/.env
     
@@ -28,7 +28,7 @@ services:
     image: roadmap/prod-web-apache
     container_name: dmp_web
     volumes:
-      - static_content:/opt/src/dmponline
+      - app_sources:/opt/src/  # Need to make generic for all services
     env_file:
       - ./.envs/.prod/.env
     depends_on:
@@ -41,7 +41,7 @@ services:
 
 volumes:
   db_volume:
-  static_content:
+  app_sources:
   
 
 
