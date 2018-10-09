@@ -1,6 +1,6 @@
 version: '3'
 services:
-  app:
+  dmponline_app:
     build:
       context: ./
       # context: https://github.com/DMPRoadmap/roadmap.git
@@ -8,10 +8,10 @@ services:
       args:
         SERVICE_NAME: dmponline
         PUMA_PORT: 3000
-    image: roadmap/prod-app
-    container_name: dmp_app
+    image: roadmap/dmponline_app
+    container_name: dmponline_app
     volumes:
-      - app_sources:/opt/src
+      - dmponline_app_src:/opt/src/dmponline
     env_file:
       - ./.envs/.prod/dmponline/.env
     depends_on:
@@ -38,8 +38,6 @@ services:
     image: postgres:9.5.5
     volumes:
       - db_volume:/var/lib/postgresql/data
-    # env_file:
-    #   - ./.envs/.prod/.env
       
   web:
     build:      
@@ -48,13 +46,13 @@ services:
     image: roadmap/prod-web-apache
     container_name: dmp_web
     volumes:
-      - app_sources:/opt/src/  # Need to make generic for all services
+      - dmponline_app_src:/opt/src/dmponline  # Need to make generic for all services
       - dmpmelbourne_app_source:/opt/src/dmpmelbourne
 
     # env_file:
     #   - ./.envs/.prod/.env
     depends_on:
-      - app
+      - dmponline_app
       - dmpmelbourne_app
     ports:
       - 80:80
@@ -64,7 +62,7 @@ services:
 
 volumes:
   db_volume:
-  app_sources:
+  dmponline_app_src:
   dmpmelbourne_app_source:
   
 
