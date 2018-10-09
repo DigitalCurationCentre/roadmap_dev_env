@@ -5,13 +5,16 @@ services:
       context: ./
       # context: https://github.com/DMPRoadmap/roadmap.git
       dockerfile: ./compose/prod/app/Dockerfile 
+      args:
+        SRC_ROOT: /opt/src
+        SERVICE_NAME: dmponline
+        PUMA_PORT: 3000
     image: roadmap/prod-app
     container_name: dmp_app
     volumes:
       - app_sources:/opt/src
     env_file:
       - ./.envs/.prod/.env
-    
     depends_on:
       - db
   db:
