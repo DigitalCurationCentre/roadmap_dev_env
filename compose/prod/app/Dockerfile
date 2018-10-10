@@ -19,8 +19,7 @@ WORKDIR $RAILS_ROOT
 
 # Adding project files
 COPY ./roadmap/ . 
-COPY ./roadmap-branding/${SERVICE_NAME}/config/  ./config 
-COPY ./roadmap-branding/${SERVICE_NAME}/lib/  ./lib
+COPY ./roadmap-branding/${SERVICE_NAME}/  .
 
 # Copy custom fonts
 COPY ./roadmap-branding/node_modules/customfonts ./lib/assets/node_modules/customfonts
@@ -28,16 +27,11 @@ COPY ./roadmap-branding/node_modules/customfonts ./lib/assets/node_modules/custo
 WORKDIR $RAILS_ROOT/lib/assets
 RUN npm install && npm run bundle -- -p
 
-# Copy public files next
 WORKDIR $RAILS_ROOT
-
-COPY  ./roadmap-branding/${SERVICE_NAME}/public/  ./public
 
 # Interpolate variables in puma configuration file
 COPY ./compose/prod/app/puma.rb /tmp/puma/
 RUN envsubst < /tmp/puma/puma.rb > $RAILS_ROOT/config/puma.rb
-
-COPY ./roadmap-branding/${SERVICE_NAME}/app/views/branded app/views/branded
 
 # TODO:  Need to deal with translations
 
