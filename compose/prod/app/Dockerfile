@@ -1,15 +1,18 @@
 FROM ruby:2.4.4
 
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev gettext-base
+
+# TODO multistage build to install npm?  The following works for now.
+RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash - && apt-get install -y nodejs
+
 # Build args are passed in via compose file
 ARG SRC_ROOT=/opt/src
 ARG PUMA_PORT
 ARG SERVICE_NAME
 
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev gettext-base
-
 # Construct rails root
 ENV RAILS_ROOT=${SRC_ROOT}/${SERVICE_NAME}
-RUN env
+ENV RAILS_ENV='production'
 
 # Set working directory
 WORKDIR $RAILS_ROOT
@@ -21,9 +24,6 @@ COPY ./roadmap-branding/${SERVICE_NAME}/lib/  ./lib
 
 # Copy custom fonts
 COPY ./roadmap-branding/node_modules/customfonts ./lib/assets/node_modules/customfonts
-
-# TODO multistage build to install npm?  The following works for now.
-RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash - && apt-get install -y nodejs
 
 WORKDIR $RAILS_ROOT/lib/assets
 RUN npm install && npm run bundle -- -p

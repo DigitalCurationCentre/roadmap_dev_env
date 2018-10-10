@@ -17,10 +17,25 @@ services:
     depends_on:
       - db
   
+  # dmponline_dev_app:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./compose/prod/app/Dockerfile 
+  #     args:
+  #       SERVICE_NAME: dmponline_dev
+  #       PUMA_PORT: 3001
+  #   image: roadmap/dmponline_dev_app
+  #   container_name: dmponline_dev_app
+  #   volumes:
+  #     - dmponline_dev_app_source:/opt/src/dmponline_dev
+  #   env_file:
+  #     - ./.envs/.prod/dmponline_dev/.env
+  #   depends_on:
+  #     - db
+  
   dmpmelbourne_app:
     build:
       context: ./
-      # context: https://github.com/DMPRoadmap/roadmap.git
       dockerfile: ./compose/prod/app/Dockerfile 
       args:
         SERVICE_NAME: dmpmelbourne
@@ -33,11 +48,29 @@ services:
       - ./.envs/.prod/dmpmelbourne/.env
     depends_on:
       - db
+
+  dmptuuli_app:
+    build:
+      context: ./
+      dockerfile: ./compose/prod/app/Dockerfile 
+      args:
+        SERVICE_NAME: dmptuuli
+        PUMA_PORT: 3010
+    image: roadmap/dmptuuli_app
+    container_name: dmptuuli_app
+    volumes:
+      - dmptuuli_app_source:/opt/src/dmptuuli
+    env_file:
+      - ./.envs/.prod/dmptuuli/.env
+    depends_on:
+      - db
       
   db:
     image: postgres:9.5.5
     volumes:
       - db_volume:/var/lib/postgresql/data
+    env_file:
+      - ./.env
       
   web:
     build:      
@@ -46,14 +79,15 @@ services:
     image: roadmap/prod-web-apache
     container_name: dmp_web
     volumes:
-      - dmponline_app_src:/opt/src/dmponline  # Need to make generic for all services
+      - dmponline_app_src:/opt/src/dmponline
       - dmpmelbourne_app_source:/opt/src/dmpmelbourne
-
-    # env_file:
-    #   - ./.envs/.prod/.env
+      - dmptuuli_app_source:/opt/src/dmptuuli
+      - dmponline_dev_app_source:/opt/src/dmponline_dev
     depends_on:
       - dmponline_app
       - dmpmelbourne_app
+      - dmptuuli_app
+      # - dmponline_dev_app
     ports:
       - 80:80
       - 2020:2020
@@ -64,6 +98,8 @@ volumes:
   db_volume:
   dmponline_app_src:
   dmpmelbourne_app_source:
+  dmptuuli_app_source:
+  dmponline_dev_app_source:
   
 
 
