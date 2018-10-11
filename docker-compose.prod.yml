@@ -64,7 +64,23 @@ services:
       - ./.envs/.prod/dmptuuli/.env
     depends_on:
       - db
-      
+     
+  dmptuuli_test_app:
+    build:
+      context: ./
+      dockerfile: ./compose/prod/app/Dockerfile 
+      args:
+        SERVICE_NAME: dmptuuli-test
+        PUMA_PORT: 3011
+    image: roadmap/dmptuuli_test_app
+    container_name: dmptuuli_test_app
+    volumes:
+      - dmptuuli_test_app_source:/opt/src/dmptuuli-test
+    env_file:
+      - ./.envs/.prod/dmptuuli_test/.env
+    depends_on:
+      - db
+
   db:
     image: postgres:9.5.5
     volumes:
@@ -82,17 +98,23 @@ services:
       - dmponline_app_src:/opt/src/dmponline
       - dmpmelbourne_app_source:/opt/src/dmpmelbourne
       - dmptuuli_app_source:/opt/src/dmptuuli
+      - dmptuuli_test_app_source:/opt/src/dmptuuli-test
       - dmponline_dev_app_source:/opt/src/dmponline_dev
-    depends_on:
-      - dmponline_app
-      - dmpmelbourne_app
-      - dmptuuli_app
-      - dmponline_dev_app
+    # depends_on:
+      # - dmponline_app
+      # - dmpmelbourne_app
+      # - dmptuuli_app
+      # - dmptuuli_test_app
+      # - dmponline_dev_app
     ports:
       - 80:80
       - 2001:2001
       - 2010:2010
+      - 2011:2011
       - 2020:2020
+    healthcheck:
+      test: 'curl localhost || exit 1'
+    restart: unless-stopped
  
 
 volumes:
@@ -100,6 +122,7 @@ volumes:
   dmponline_app_src:
   dmpmelbourne_app_source:
   dmptuuli_app_source:
+  dmptuuli_test_app_source:
   dmponline_dev_app_source:
   
 
