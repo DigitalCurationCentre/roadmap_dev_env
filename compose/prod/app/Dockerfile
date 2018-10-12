@@ -19,12 +19,21 @@ WORKDIR $RAILS_ROOT
 
 # Adding project files
 COPY ./roadmap/ . 
+
+# Add missing puma gem
+RUN echo "gem 'puma'" >> Gemfile
+
+# Copy service specific branding
 COPY ./roadmap-branding/${SERVICE_NAME}/  .
+
+# Copy database and secrets templates templates
+COPY ./config/ ./config/ 
 
 # Copy custom fonts
 COPY ./roadmap-branding/node_modules/customfonts ./lib/assets/node_modules/customfonts
 
 WORKDIR $RAILS_ROOT/lib/assets
+
 RUN npm install && npm run bundle -- -p
 
 WORKDIR $RAILS_ROOT

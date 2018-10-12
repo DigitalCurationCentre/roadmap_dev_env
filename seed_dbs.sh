@@ -1,6 +1,8 @@
 #!/bin/bash
 # Convenience to seed all dbs
 
+set -e
+
 function seedDbs {
     containers=( "dmponline_app" "dmpmelbourne_app" "dmptuuli_app" "dmponline_dev_app" "dmptuuli_test_app" )
     
@@ -13,4 +15,3 @@ function seedDbs {
 }
 
 seedDbs
-exit 0
