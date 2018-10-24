@@ -5,7 +5,7 @@ RUN apt-get update && apt-get -y install gettext-base build-essential
 
 # Variables.  NOTE that these are different from those used by docker compose in .envs
 ENV SRC_ROOT=/opt/src \
-    BASE_LOG_DIR=/var/log/dmp \
+    BASE_LOG_DIR=/var/log \
     #
     # DMP Online Service
     #

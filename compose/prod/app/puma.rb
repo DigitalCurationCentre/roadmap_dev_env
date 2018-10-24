@@ -20,7 +20,8 @@ environment rails_env
 bind 'tcp://0.0.0.0:$PUMA_PORT'
 
 # Logging
-stdout_redirect "#{shared_dir}/log/puma.stdout.log", "#{shared_dir}/log/puma.stderr.log", true
+# stdout_redirect "#{shared_dir}/log/puma.stdout.log", "#{shared_dir}/log/puma.stderr.log", true
+# stdout_redirect "/var/log/$SERVICE_NAME/puma.stdout.log", "/var/log/$SERVICE_NAME/puma.stderr.log", true
 
 # Set master PID and state locations
 pidfile "#{shared_dir}/pids/puma.pid"

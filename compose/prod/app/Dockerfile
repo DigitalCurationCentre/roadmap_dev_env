@@ -42,6 +42,8 @@ WORKDIR $RAILS_ROOT
 COPY ./compose/prod/app/puma.rb /tmp/puma/
 RUN envsubst < /tmp/puma/puma.rb > $RAILS_ROOT/config/puma.rb
 
+RUN mkdir /var/log/${SERVICE_NAME}
+
 # TODO:  Need to deal with translations
 
 RUN bundle install
