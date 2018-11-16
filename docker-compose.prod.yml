@@ -1,5 +1,8 @@
 version: '3'
 services:
+
+  ############ DMPONLINE ############
+
   dmponline_app:
     build:
       context: ./
@@ -18,6 +21,34 @@ services:
     depends_on:
       - db
   
+  dmponline_web:
+    build:      
+      context: .      
+      dockerfile: ./compose/prod/apache/Dockerfile
+      args:
+        SERVICE_NAME: dmponline
+        PUMA_PORT: 3000
+        SERVICE_PORT: 80
+    image: roadmap/dmponline_web
+    container_name: dmponline_web
+
+    volumes:
+      - dmponline_app_source:/opt/src/dmponline
+      # - logs:/var/log
+
+    depends_on:
+      - dmponline_app
+    ports:
+      - 80:80
+    healthcheck:
+      test: 'curl localhost || exit 1'
+    restart: unless-stopped
+ 
+  ############ END DMPONLINE ############
+
+
+  ############ DMPONLINEDEV ############
+
   dmponline_dev_app:
     build:
       context: ./
@@ -35,6 +66,32 @@ services:
     depends_on:
       - db
   
+  dmponline_dev_web:
+    build:      
+      context: .      
+      dockerfile: ./compose/prod/apache/Dockerfile
+      args:
+        SERVICE_NAME: dmponline_dev
+        PUMA_PORT: 3001
+        SERVICE_PORT: 2001
+    image: roadmap/dmponline_dev_web
+    container_name: dmponline_dev_web
+    volumes:
+      - dmponline_dev_app_source:/opt/src/dmponline_dev
+      # - logs:/var/log
+    depends_on:
+      - dmponline_dev_app
+    ports:
+      - 2001:2001
+    healthcheck:
+      test: 'curl localhost || exit 1'
+    restart: unless-stopped
+
+  ############ END DMPONLINEDEV ############
+
+
+  ############ DMPMELBOURNE ############
+
   dmpmelbourne_app:
     build:
       context: ./
@@ -52,6 +109,31 @@ services:
     depends_on:
       - db
 
+  dmpmelbourne_web:
+    build:      
+      context: .      
+      dockerfile: ./compose/prod/apache/Dockerfile
+      args:
+        SERVICE_NAME: dmpmelbourne
+        PUMA_PORT: 3020
+        SERVICE_PORT: 2020
+    image: roadmap/dmpmelbourne_web
+    container_name: dmpmelbourne_web
+    volumes:
+      - dmpmelbourne_app_source:/opt/src/dmpmelbourne
+      # - logs:/var/log
+    depends_on:
+      - dmpmelbourne_app
+    ports:
+      - 2020:2020
+    healthcheck:
+      test: 'curl localhost || exit 1'
+    restart: unless-stopped
+
+  ############ END DMPMELBOURNE ############
+
+  ############ DMPTUULI ############
+
   dmptuuli_app:
     build:
       context: ./
@@ -68,7 +150,32 @@ services:
       - ./.envs/.prod/dmptuuli/.env
     depends_on:
       - db
-     
+    
+  dmptuuli_web:
+      build:      
+        context: .      
+        dockerfile: ./compose/prod/apache/Dockerfile
+        args:
+          SERVICE_NAME: dmptuuli
+          PUMA_PORT: 3010
+          SERVICE_PORT: 2010
+      image: roadmap/dmptuuli_web
+      container_name: dmptuuli_web
+      volumes:
+        - dmptuuli_app_source:/opt/src/dmptuuli
+        # - logs:/var/log
+      depends_on:
+        - dmptuuli_app
+      ports:
+        - 2010:2010
+      healthcheck:
+        test: 'curl localhost || exit 1'
+      restart: unless-stopped
+
+  ############ END DMPTUULI ############
+
+  ############ DMPTUULI_TEST ############
+
   dmptuuli_test_app:
     build:
       context: ./
@@ -86,6 +193,29 @@ services:
     depends_on:
       - db
 
+  dmptuuli_test_web:
+    build:      
+      context: .      
+      dockerfile: ./compose/prod/apache/Dockerfile
+      args:
+        SERVICE_NAME: dmptuuli_test
+        PUMA_PORT: 3011
+        SERVICE_PORT: 2011
+    image: roadmap/dmptuuli_test_web
+    container_name: dmptuuli_test_web
+    volumes:
+      - dmptuuli_test_app_source:/opt/src/dmptuuli-test
+      # - logs:/var/log
+    depends_on:
+      - dmptuuli_test_app
+    ports:
+      - 2011:2011
+    healthcheck:
+      test: 'curl localhost || exit 1'
+    restart: unless-stopped
+
+  ############ END DMPTUULI_TEST ############
+
   db:
     image: postgres:9.5.5
     volumes:
@@ -93,37 +223,6 @@ services:
     env_file:
       - ./.env
       
-  web:
-    build:      
-      context: .      
-      dockerfile: ./compose/prod/apache/Dockerfile
-    image: roadmap/prod-web-apache
-    container_name: dmp_web
-    volumes:
-      - dmponline_app_source:/opt/src/dmponline
-      - dmpmelbourne_app_source:/opt/src/dmpmelbourne
-      - dmptuuli_app_source:/opt/src/dmptuuli
-      - dmptuuli_test_app_source:/opt/src/dmptuuli-test
-      - dmponline_dev_app_source:/opt/src/dmponline_dev
-      # - logs:/var/log
-
-    # depends_on:
-      # - dmponline_app
-      # - dmpmelbourne_app
-      # - dmptuuli_app
-      # - dmptuuli_test_app
-      # - dmponline_dev_app
-    ports:
-      - 80:80
-      - 2001:2001
-      - 2010:2010
-      - 2011:2011
-      - 2020:2020
-    healthcheck:
-      test: 'curl localhost || exit 1'
-    restart: unless-stopped
- 
-
 volumes:
   db_volume:
   dmponline_app_source:
