@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo 'Runnining conditional asset precompile'
+
+if [ $# -eq 0 ] ; then
+  echo 'Precompiling assets, no argument provided'
+  RAILS_ENV=production rake assets:precompile
+else
+  if [ $1 == "not" ] ; then
+    echo 'Not Precompiling assets'
+  else
+    echo 'unnexpected argument supplied, recieved:\"$1\", expected:\"not\"'
+  fi
+fi

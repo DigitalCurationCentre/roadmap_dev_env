@@ -3,8 +3,8 @@ services:
   server:
     build:
       context: ./
-      dockerfile: ./Dockerfile.server
-    image: roadmap/server
+      args:
+        precompileassets: 'not'
     volumes:
       - ./roadmap:/usr/src/app
       - ./config/branding.yml:/usr/src/app/config/branding.yml
@@ -14,25 +14,31 @@ services:
       - ./config/initializers/devise.rb:/usr/src/app/config/initializers/devise.rb
       - ./config/initializers/recaptcha.rb:/usr/src/app/config/initializers/recaptcha.rb
       - ./config/initializers/wicked_pdf.rb:/usr/src/app/config/initializers/wicked_pdf.rb
-      - ./db/seeds.rb:/usr/src/app/db/seeds.rb
-      #- ./../roadmap-branding/dmpmelbourne/app/views/branded:/usr/src/app/app/views/branded
+      # - ./db/seeds.rb:/usr/src/app/db/seeds.rb
+      # - ./../roadmap-branding/dmpmelbourne/app/views/branded:/usr/src/app/app/views/branded
       - ./db_backups/:/tmp/dat/
+      - ~/work/forks/rails:/usr/gems/rails
+    command: bundle exec puma -C config/puma.rb
     ports:
       - "3000:3000"
     env_file:
       - ./.env
     depends_on:
       - db
-  client:
+
+  webpacker:
     build:
-      context: .
-      dockerfile: Dockerfile.client
-    image: roadmap/client
+      context: ./
+      args:
+        precompileassets: 'not'
+    env_file:
+      - '.env'
+    command: /usr/src/app/bin/webpack-dev-server
     volumes:
-      - ./roadmap/lib/assets:/usr/src/app
-      - client_volume:/usr/src/app/node_modules
-      - ./roadmap/config:/usr/config
-      - ./roadmap/public:/usr/public
+     - ./roadmap:/usr/src/app
+    ports:
+      - '3035:3035'
+
   db:
     image: postgres:9.5.5
     volumes:
