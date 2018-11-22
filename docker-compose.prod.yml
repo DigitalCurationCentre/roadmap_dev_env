@@ -11,10 +11,10 @@ services:
       args:
         SERVICE_NAME: dmponline
         PUMA_PORT: 3000
-    image: roadmap/dmponline_app
+    image: dmponline_app
     container_name: dmponline_app
-    volumes:
-      - dmponline_app_source:/opt/src/dmponline
+    # volumes:
+    #   - dmponline_app_source:/opt/src/dmponline
       # - logs:/var/log
     env_file:
       - ./.envs/.prod/dmponline/.env
@@ -27,15 +27,14 @@ services:
       dockerfile: ./compose/prod/apache/Dockerfile
       args:
         SERVICE_NAME: dmponline
+        APP_SERVICE_NAME: dmponline_app:${VERSION:-latest}
         PUMA_PORT: 3000
         SERVICE_PORT: 80
-    image: roadmap/dmponline_web
+    image: dmponline_web
     container_name: dmponline_web
-
-    volumes:
-      - dmponline_app_source:/opt/src/dmponline
+    # volumes:
+    #   - dmponline_app_source:/opt/src/dmponline
       # - logs:/var/log
-
     depends_on:
       - dmponline_app
     ports:
@@ -56,10 +55,10 @@ services:
       args:
         SERVICE_NAME: dmponline_dev
         PUMA_PORT: 3001
-    image: roadmap/dmponline_dev_app
+    image: dmponline_dev_app
     container_name: dmponline_dev_app
-    volumes:
-      - dmponline_dev_app_source:/opt/src/dmponline_dev
+    # volumes:
+    #   - dmponline_dev_app_source:/opt/src/dmponline_dev
       # - logs:/var/log
     env_file:
       - ./.envs/.prod/dmponline_dev/.env
@@ -72,12 +71,13 @@ services:
       dockerfile: ./compose/prod/apache/Dockerfile
       args:
         SERVICE_NAME: dmponline_dev
+        APP_SERVICE_NAME: dmponline_dev_app:${VERSION:-latest}
         PUMA_PORT: 3001
         SERVICE_PORT: 2001
-    image: roadmap/dmponline_dev_web
+    image: dmponline_dev_web
     container_name: dmponline_dev_web
-    volumes:
-      - dmponline_dev_app_source:/opt/src/dmponline_dev
+    # volumes:
+    #   - dmponline_dev_app_source:/opt/src/dmponline_dev
       # - logs:/var/log
     depends_on:
       - dmponline_dev_app
@@ -99,10 +99,10 @@ services:
       args:
         SERVICE_NAME: dmpmelbourne
         PUMA_PORT: 3020
-    image: roadmap/dmpmelbourne_app
+    image: dmpmelbourne_app
     container_name: dmpmelbourne_app
-    volumes:
-      - dmpmelbourne_app_source:/opt/src/dmpmelbourne
+    # volumes:
+    #   - dmpmelbourne_app_source:/opt/src/dmpmelbourne
       # - logs:/var/log
     env_file:
       - ./.envs/.prod/dmpmelbourne/.env
@@ -115,12 +115,13 @@ services:
       dockerfile: ./compose/prod/apache/Dockerfile
       args:
         SERVICE_NAME: dmpmelbourne
+        APP_SERVICE_NAME: dmpmelbourne_app:${VERSION:-latest}
         PUMA_PORT: 3020
         SERVICE_PORT: 2020
-    image: roadmap/dmpmelbourne_web
+    image: dmpmelbourne_web
     container_name: dmpmelbourne_web
-    volumes:
-      - dmpmelbourne_app_source:/opt/src/dmpmelbourne
+    # volumes:
+    #   - dmpmelbourne_app_source:/opt/src/dmpmelbourne
       # - logs:/var/log
     depends_on:
       - dmpmelbourne_app
@@ -141,10 +142,10 @@ services:
       args:
         SERVICE_NAME: dmptuuli
         PUMA_PORT: 3010
-    image: roadmap/dmptuuli_app
+    image: dmptuuli_app
     container_name: dmptuuli_app
-    volumes:
-      - dmptuuli_app_source:/opt/src/dmptuuli      
+    # volumes:
+      # - dmptuuli_app_source:/opt/src/dmptuuli      
       # - logs:/var/log
     env_file:
       - ./.envs/.prod/dmptuuli/.env
@@ -157,12 +158,13 @@ services:
         dockerfile: ./compose/prod/apache/Dockerfile
         args:
           SERVICE_NAME: dmptuuli
+          APP_SERVICE_NAME: dmptuuli_app:${VERSION:-latest}
           PUMA_PORT: 3010
           SERVICE_PORT: 2010
-      image: roadmap/dmptuuli_web
+      image: dmptuuli_web
       container_name: dmptuuli_web
-      volumes:
-        - dmptuuli_app_source:/opt/src/dmptuuli
+      # volumes:
+        # - dmptuuli_app_source:/opt/src/dmptuuli
         # - logs:/var/log
       depends_on:
         - dmptuuli_app
@@ -176,43 +178,44 @@ services:
 
   ############ DMPTUULI_TEST ############
 
-  dmptuuli_test_app:
-    build:
-      context: ./
-      dockerfile: ./compose/prod/app/Dockerfile 
-      args:
-        SERVICE_NAME: dmptuuli-test
-        PUMA_PORT: 3011
-    image: roadmap/dmptuuli_test_app
-    container_name: dmptuuli_test_app
-    volumes:
-      - dmptuuli_test_app_source:/opt/src/dmptuuli-test
-      # - logs:/var/log
-    env_file:
-      - ./.envs/.prod/dmptuuli_test/.env
-    depends_on:
-      - db
+  # dmptuuli_test_app:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./compose/prod/app/Dockerfile 
+  #     args:
+  #       SERVICE_NAME: dmptuuli-test
+  #       PUMA_PORT: 3011
+  #   image: dmptuuli_test_app
+  #   container_name: dmptuuli_test_app
+  #   # volumes:
+  #     # - dmptuuli_test_app_source:/opt/src/dmptuuli-test
+  #     # - logs:/var/log
+  #   env_file:
+  #     - ./.envs/.prod/dmptuuli_test/.env
+  #   depends_on:
+  #     - db
 
-  dmptuuli_test_web:
-    build:      
-      context: .      
-      dockerfile: ./compose/prod/apache/Dockerfile
-      args:
-        SERVICE_NAME: dmptuuli_test
-        PUMA_PORT: 3011
-        SERVICE_PORT: 2011
-    image: roadmap/dmptuuli_test_web
-    container_name: dmptuuli_test_web
-    volumes:
-      - dmptuuli_test_app_source:/opt/src/dmptuuli-test
-      # - logs:/var/log
-    depends_on:
-      - dmptuuli_test_app
-    ports:
-      - 2011:2011
-    healthcheck:
-      test: 'curl localhost || exit 1'
-    restart: unless-stopped
+  # dmptuuli_test_web:
+  #   build:      
+  #     context: .      
+  #     dockerfile: ./compose/prod/apache/Dockerfile
+  #     args:
+  #       SERVICE_NAME: dmptuuli_test
+  #       APP_SERVICE_NAME: dmptuuli_test_app:${VERSION:-latest}
+  #       PUMA_PORT: 3011
+  #       SERVICE_PORT: 2011
+  #   image: dmptuuli_test_web
+  #   container_name: dmptuuli_test_web
+  #   # volumes:
+  #   #   - dmptuuli_test_app_source:/opt/src/dmptuuli-test
+  #     # - logs:/var/log
+  #   depends_on:
+  #     - dmptuuli_test_app
+  #   ports:
+  #     - 2011:2011
+  #   healthcheck:
+  #     test: 'curl localhost || exit 1'
+  #   restart: unless-stopped
 
   ############ END DMPTUULI_TEST ############
 
@@ -225,10 +228,10 @@ services:
       
 volumes:
   db_volume:
-  dmponline_app_source:
+  # dmponline_app_source:
   dmpmelbourne_app_source:
   dmptuuli_app_source:
-  dmptuuli_test_app_source:
+  # dmptuuli_test_app_source:
   dmponline_dev_app_source:
   logs:
   

@@ -26,7 +26,7 @@ RUN echo "gem 'puma'" >> Gemfile
 # Copy service specific branding
 COPY ./roadmap-branding/${SERVICE_NAME}/  .
 
-# Copy database and secrets templates templates
+# Copy database and secrets templates
 COPY ./config/ ./config/ 
 
 # Copy custom fonts
