@@ -32,10 +32,15 @@ services:
       args:
         precompileassets: 'not'
     env_file:
-      - '.env'
+      - ./.env
     command: /usr/src/app/bin/webpack-dev-server
     volumes:
-     - ./roadmap:/usr/src/app
+     - ./roadmap/app:/usr/src/app/app
+     - ./roadmap/lib:/usr/src/app/lib
+     - ./roadmap/bin:/usr/src/app/bin
+     - ./roadmap/config:/usr/src/app/config
+     - ./roadmap/.eslintrc.json:/usr/src/app/.eslintrc.json
+     - ./roadmap/public:/usr/src/app/public
     ports:
       - '3035:3035'
 
@@ -47,4 +52,3 @@ services:
       - ./.env
 volumes:
   db_volume:
-  client_volume:
