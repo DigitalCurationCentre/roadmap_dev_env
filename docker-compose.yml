@@ -3,8 +3,6 @@ services:
   server:
     build:
       context: ./
-      args:
-        precompileassets: 'not'
     volumes:
       - ./roadmap:/usr/src/app
       - ./config/branding.yml:/usr/src/app/config/branding.yml
@@ -14,12 +12,9 @@ services:
       - ./config/initializers/devise.rb:/usr/src/app/config/initializers/devise.rb
       - ./config/initializers/recaptcha.rb:/usr/src/app/config/initializers/recaptcha.rb
       - ./config/initializers/wicked_pdf.rb:/usr/src/app/config/initializers/wicked_pdf.rb
-      # - ./db/seeds.rb:/usr/src/app/db/seeds.rb
-      # - ./../roadmap-branding/dmpmelbourne/app/views/branded:/usr/src/app/app/views/branded
       - ./db_backups/:/tmp/dat/
       - ~/work/forks/rails:/usr/gems/rails
       - ./scripts/start_puma_server.sh:/usr/src/app/start_puma_server
-    #entrypoint: bundle exec rake assets:precompile
     command: /usr/src/app/start_puma_server
     ports:
       - "3000:3000"
@@ -27,24 +22,6 @@ services:
       - ./.env
     depends_on:
       - db
-
-  # webpacker:
-  #   build:
-  #     context: ./
-  #     args:
-  #       precompileassets: 'not'
-  #   env_file:
-  #     - ./.env
-  #   command: /usr/src/app/bin/webpack-dev-server
-  #   volumes:
-  #    - ./roadmap/app:/usr/src/app/app
-  #    - ./roadmap/lib:/usr/src/app/lib
-  #    - ./roadmap/bin:/usr/src/app/bin
-  #    - ./roadmap/config:/usr/src/app/config
-  #    - ./roadmap/.eslintrc.json:/usr/src/app/.eslintrc.json
-  #    - ./roadmap/public:/usr/src/app/public
-  #   ports:
-  #     - '3035:3035'
 
   db:
     image: postgres:9.5.5
