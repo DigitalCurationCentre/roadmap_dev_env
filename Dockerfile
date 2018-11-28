@@ -25,7 +25,10 @@ RUN apt-get install -y nodejs
 RUN apt-get update && apt-get install -y yarn
 
 # re-build from here if Gemfile or .lock change
+# COPY .env ./
 COPY ./roadmap/Gemfile* ./
+# RUN if [ -e Gemfile.custom ] then export
+RUN gem install bundler
 RUN bundle install --without mysql thin
 
 # re-build from here if package.json or yarn.lock change

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-bundle check || bundle install --without mysql thin
+bundle exec rake assets:precompile
 
-rake db:migrate
-
-puma config.ru
+bundle exec puma -C config/puma.rb
