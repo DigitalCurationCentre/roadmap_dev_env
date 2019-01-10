@@ -13,10 +13,10 @@ services:
     image: dmp_app
     container_name: dmp_app
     volumes:
-      - dmponline_app_source:/opt/src/dmp
+      - dmp_app_source:/opt/src/dmp
       # - logs:/var/log
     env_file:
-      - ./.envs/.prod/dmponline/.env
+      - ./.envs/.prod/dmp/.env
     depends_on:
       - db
   
@@ -30,7 +30,7 @@ services:
     image: dmp_web
     container_name: dmp_web
     volumes:
-      - dmponline_app_source:/opt/src/dmp
+      - dmp_app_source:/opt/src/dmp
       # - logs:/var/log
     depends_on:
       - dmp_app
@@ -50,7 +50,7 @@ services:
       
 volumes:
   db_volume:
-  dmponline_app_source:
+  dmp_app_source:
   # logs:
   
 
