@@ -1,7 +1,3 @@
-#Import previously built app image (for static resources)
-ARG APP_SERVICE_NAME
-FROM $APP_SERVICE_NAME AS app
-
 FROM httpd:2.4
 
 # Need gettext for envsubst
@@ -39,9 +35,6 @@ COPY /compose/prod/apache/conf.d/* /usr/local/apache2/conf.d/
 
 # TODO shib daemon
 COPY supervisord/supervisor-app.conf /etc/supervisor/conf.d/
-
-# Copy static resources from app image 
-COPY --from=app /opt/src/${SERVICE_NAME}/public /opt/src/${SERVICE_NAME}/public
 
 # Start supervisord in foreground
 CMD ["supervisord", "-n"]
