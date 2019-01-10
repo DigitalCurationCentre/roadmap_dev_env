@@ -1,9 +1,14 @@
 FROM httpd:2.4
 
 # Need gettext for envsubst
-RUN apt-get update && apt-get -y install gettext-base build-essential \
---no-install-recommends shibboleth-sp2-utils libapache2-mod-shib2 supervisor
-	# && rm -r /var/lib/apt/lists/*
+RUN apt-get update && \
+ apt-get -y install \
+ gettext-base \
+ build-essential \
+ --no-install-recommends shibboleth-sp2-utils \
+ libapache2-mod-shib2 \
+ supervisor \
+ && rm -r /var/lib/apt/lists/*
 
 # Build args from compose
 ARG SERVICE_NAME=dmp

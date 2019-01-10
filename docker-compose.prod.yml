@@ -40,7 +40,6 @@ services:
       test: 'curl localhost || exit 1'
     restart: unless-stopped
  
-
   db:
     image: postgres:9.5.5
     volumes:
@@ -52,9 +51,3 @@ volumes:
   db_volume:
   dmp_app_source:
   # logs:
-  
-
-
-  
-
-

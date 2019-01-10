@@ -1,8 +1,15 @@
 FROM ruby:2.4.4
 
 RUN apt-get update -qq && \
- apt-get install -y build-essential libpq-dev gettext-base imagemagick \
- && curl -sL https://deb.nodesource.com/setup_10.x |  bash - && apt-get install -y nodejs 
+ apt-get install -y \
+ build-essential \
+ libpq-dev \
+ gettext-base \
+ imagemagick \
+ && curl -sL https://deb.nodesource.com/setup_10.x |  \
+ bash - && apt-get install -y \
+ nodejs \
+&& rm -rf /var/lib/apt/lists/*
 
 # Build args are passed in via compose file
 ARG SRC_ROOT=/opt/src
