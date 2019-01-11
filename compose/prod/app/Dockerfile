@@ -4,6 +4,7 @@ RUN apt-get update -qq && \
  apt-get install -y \
  build-essential \
  libpq-dev \
+ wkhtmltopdf \
  gettext-base \
  imagemagick \
  && curl -sL https://deb.nodesource.com/setup_10.x |  \
@@ -22,8 +23,10 @@ ARG RAILS_ENV
 # Get rails env (production/development from environment variable)
 ENV RAILS_ENV=${RAILS_ENV}
 
-# Construct rails root
-ENV RAILS_ROOT=${SRC_ROOT}/${SERVICE_NAME}
+# Construct rails root and set required env variables
+ENV RAILS_ROOT=${SRC_ROOT}/${SERVICE_NAME} 
+ENV BUNDLE_GEMFILE=Gemfile.custom
+ENV BUNDLE_GITHUB__COM=${GITHUB_TOKEN}
 
 # Set working directory
 WORKDIR $RAILS_ROOT
@@ -31,14 +34,13 @@ WORKDIR $RAILS_ROOT
 # Adding project files
 COPY ./roadmap/ . 
 
-# Copy service specific branding
-# COPY ./roadmap-branding/${SERVICE_NAME}/  .
-
 # ******* Temporary to try and get things working *********
-# COPY ./roadmap-branding/dmponline/  .
+COPY ./roadmap-branding/dmponline/  .
 
 # Copy database and secrets templates
 COPY ./config/ ./config/ 
+# Copy startup script
+COPY ./compose/prod/app/precompile_assets_and_start_puma.sh /usr/local/bin
 
 # Copy custom fonts
 # COPY ./roadmap-branding/node_modules/customfonts ./lib/assets/node_modules/customfonts
@@ -48,35 +50,23 @@ COPY ./config/ ./config/
 # RUN npm install && npm run bundle -- -p --no-watch
 # WORKDIR $RAILS_ROOT
 
-# Install yarn
-RUN npm install --global yarn
-
 # Interpolate variables in configuration files
 COPY ./compose/prod/app/puma.rb /tmp/puma/
 COPY ./Gemfile.custom /tmp/roadmap-extension/
 
-RUN envsubst < /tmp/puma/puma.rb > $RAILS_ROOT/config/puma.rb
-RUN envsubst < /tmp/roadmap-extension/Gemfile.custom  > $RAILS_ROOT/Gemfile.custom
+RUN envsubst < /tmp/puma/puma.rb > $RAILS_ROOT/config/puma.rb && \
+    envsubst < /tmp/roadmap-extension/Gemfile.custom  > $RAILS_ROOT/Gemfile.custom && \
+    mkdir /var/log/${SERVICE_NAME} && \
+    bash -c 'mkdir -p puma/${SERVICE_NAME}/{sockets,pids,log}' 
 
-RUN mkdir /var/log/${SERVICE_NAME}
+RUN npm install --global yarn && \
+    gem install bundler && \
+    bundle install --without development test && \
+    rake webpacker:yarn_install
 
 # TODO:  Translations?
 
-# Create directories that Puma expects
-RUN bash -c 'mkdir -p puma/${SERVICE_NAME}/{sockets,pids,log}'
-
-ENV BUNDLE_GEMFILE=Gemfile.custom
-ENV BUNDLE_GITHUB__COM=${GITHUB_TOKEN}
-
-RUN gem install bundler
-
-RUN bundle install
-
-RUN rake webpacker:yarn_install
-
 EXPOSE $PUMA_PORT
-
-COPY ./compose/prod/app/precompile_assets_and_start_puma.sh /usr/local/bin
 
 # We use a script to start rather than start puma directly so that we can precompile
 # the assets.  Not possible to to it during build phase as db not available
