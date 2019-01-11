@@ -40,9 +40,6 @@ COPY ./roadmap/ .
 # Copy database and secrets templates
 COPY ./config/ ./config/ 
 
-# Copy custom Gemfile for multitenancy
-COPY ./Gemfile.custom ./
-
 # Copy custom fonts
 # COPY ./roadmap-branding/node_modules/customfonts ./lib/assets/node_modules/customfonts
 

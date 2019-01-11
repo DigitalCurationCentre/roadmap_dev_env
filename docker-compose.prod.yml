@@ -10,7 +10,7 @@ services:
         ROADMAP_EXTENSION_VERSION: ${ROADMAP_EXTENSION_VERSION:-0.7.16} # NOTE this breaks when version number is incremented in extension repo.  Maybe needs .gemspec?
         GITHUB_TOKEN: ${GITHUB_TOKEN:?GITHUB_TOKEN environment var needs to be specified} 
         RAILS_ENV: ${RAILS_ENV:-production}
-    image: dmp_app
+    image: dmp_app  # TODO: Needs to be replaced with registry url when setup
     container_name: dmp_app
     volumes:
       - dmp_app_source:/opt/src/dmp
@@ -27,7 +27,7 @@ services:
       args:
         PUMA_PORT: ${PUMA_PORT:-3000}
         SERVICE_PORT: ${SERVICE_PORT:-80}
-    image: dmp_web
+    image: dmp_web  # TODO: Needs to be replaced with registry url when setup
     container_name: dmp_web
     volumes:
       - dmp_app_source:/opt/src/dmp
