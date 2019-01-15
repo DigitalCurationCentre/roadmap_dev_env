@@ -1,7 +1,7 @@
 FROM ruby:2.4.4
 
 RUN apt-get update -qq && \
- apt-get install -y \
+ apt-get install -y --no-install-recommends \
  build-essential \
  libpq-dev \
  wkhtmltopdf \
@@ -10,7 +10,11 @@ RUN apt-get update -qq && \
  && curl -sL https://deb.nodesource.com/setup_10.x |  \
  bash - && apt-get install -y \
  nodejs \
-&& rm -rf /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/* \
+&& rm -Rf /usr/share/doc \
+&& rm -Rf /usr/share/man \
+&& apt-get clean
+
 
 # Build args are passed in via compose file
 ARG SRC_ROOT=/opt/src
@@ -34,21 +38,21 @@ WORKDIR $RAILS_ROOT
 # Adding project files
 COPY ./roadmap/ . 
 
-# ******* Temporary to try and get things working *********
-COPY ./roadmap-branding/dmponline/  .
-
 # Copy database and secrets templates
 COPY ./config/ ./config/ 
+
+# TODO: Temporary only
+# COPY ./roadmap-branding/dmponline/config/branding.yml config/branding.yml
+
+WORKDIR $RAILS_ROOT/config
+RUN mv branding.yml.sample branding.yml
+WORKDIR $RAILS_ROOT
+
+# Copy database and secrets templates
+# COPY ./config/ ./config/ 
+
 # Copy startup script
 COPY ./compose/prod/app/precompile_assets_and_start_puma.sh /usr/local/bin
-
-# Copy custom fonts
-# COPY ./roadmap-branding/node_modules/customfonts ./lib/assets/node_modules/customfonts
-
-# WORKDIR $RAILS_ROOT/lib/assets
-# RUN npm install && npm run bundle -- -p  # IS THIS STILL REQUIRED?
-# RUN npm install && npm run bundle -- -p --no-watch
-# WORKDIR $RAILS_ROOT
 
 # Interpolate variables in configuration files
 COPY ./compose/prod/app/puma.rb /tmp/puma/
@@ -60,9 +64,9 @@ RUN envsubst < /tmp/puma/puma.rb > $RAILS_ROOT/config/puma.rb && \
     bash -c 'mkdir -p puma/${SERVICE_NAME}/{sockets,pids,log}' 
 
 RUN npm install --global yarn && \
-    gem install bundler && \
-    bundle install --without development test && \
-    rake webpacker:yarn_install
+    gem install bundler
+
+RUN bundle install --without mysql thin
 
 # TODO:  Translations?
 
