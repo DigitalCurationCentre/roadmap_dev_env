@@ -1,4 +1,4 @@
-FROM ruby:2.4.4
+FROM starefossen/ruby-node:2-10-slim
 
 RUN apt-get update -qq && \
  apt-get install -y --no-install-recommends \
@@ -6,15 +6,12 @@ RUN apt-get update -qq && \
  libpq-dev \
  wkhtmltopdf \
  gettext-base \
+ git \
  imagemagick \
- && curl -sL https://deb.nodesource.com/setup_10.x |  \
- bash - && apt-get install -y \
- nodejs \
 && rm -rf /var/lib/apt/lists/* \
 && rm -Rf /usr/share/doc \
 && rm -Rf /usr/share/man \
 && apt-get clean
-
 
 # Build args are passed in via compose file
 ARG SRC_ROOT=/opt/src
@@ -41,15 +38,9 @@ COPY ./roadmap/ .
 # Copy database and secrets templates
 COPY ./config/ ./config/ 
 
-# TODO: Temporary only
-# COPY ./roadmap-branding/dmponline/config/branding.yml config/branding.yml
-
 WORKDIR $RAILS_ROOT/config
 RUN mv branding.yml.sample branding.yml
 WORKDIR $RAILS_ROOT
-
-# Copy database and secrets templates
-# COPY ./config/ ./config/ 
 
 # Copy startup script
 COPY ./compose/prod/app/precompile_assets_and_start_puma.sh /usr/local/bin
@@ -63,12 +54,8 @@ RUN envsubst < /tmp/puma/puma.rb > $RAILS_ROOT/config/puma.rb && \
     mkdir /var/log/${SERVICE_NAME} && \
     bash -c 'mkdir -p puma/${SERVICE_NAME}/{sockets,pids,log}' 
 
-RUN npm install --global yarn && \
-    gem install bundler
-
-RUN bundle install --without mysql thin
-
-# TODO:  Translations?
+RUN gem install bundler && \
+    bundle install --without mysql thin
 
 EXPOSE $PUMA_PORT
 
