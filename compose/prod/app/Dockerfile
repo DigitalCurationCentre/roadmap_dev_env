@@ -42,9 +42,6 @@ WORKDIR $RAILS_ROOT/config
 RUN mv branding.yml.sample branding.yml
 WORKDIR $RAILS_ROOT
 
-# Copy startup script
-COPY ./compose/prod/app/precompile_assets_and_start_puma.sh /usr/local/bin
-
 # Interpolate variables in configuration files
 COPY ./compose/prod/app/puma.rb /tmp/puma/
 COPY ./Gemfile.custom /tmp/roadmap-extension/
@@ -57,8 +54,9 @@ RUN envsubst < /tmp/puma/puma.rb > $RAILS_ROOT/config/puma.rb && \
 RUN gem install bundler && \
     bundle install --without mysql thin
 
+# Precompile assets with nulldb
+RUN DATABASE_URL='nulldb://nohost' bundle exec rake assets:precompile
+
 EXPOSE $PUMA_PORT
 
-# We use a script to start rather than start puma directly so that we can precompile
-# the assets.  Not possible to to it during build phase as db not available
-CMD ["/usr/local/bin/precompile_assets_and_start_puma.sh"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

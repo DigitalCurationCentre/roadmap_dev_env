@@ -5,7 +5,8 @@ eval_gemfile "Gemfile" if File.exist?("Gemfile")
 
 ##
 # Load extra gems around the app...
-
+# nulldb used when building dmp_app docker image to allow us to precompile assets without real db
+gem "activerecord-nulldb-adapter" 
 # Roadmap extension gem. This is a private gem—not published on Rubygems, but instead
 # loaded from GitHub.
 # Commenting out version for now - doesn't work when the version at master in repo is > ROADMAP_EXTENSION_VERSION
