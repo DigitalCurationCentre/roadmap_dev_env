@@ -13,8 +13,8 @@ services:
     image: dmp_app  # TODO: Needs to be replaced with registry url when setup
     container_name: dmp_app
     volumes:
-      - dmp_app_source:/opt/src/dmp
-      # - logs:/var/log
+      - logs:/var/log
+      # - dmp_app_source:/opt/src/dmp
     env_file:
       - ./.envs/.prod/dmp/.env
     depends_on:
@@ -30,8 +30,8 @@ services:
     image: dmp_web  # TODO: Needs to be replaced with registry url when setup
     container_name: dmp_web
     volumes:
-      - dmp_app_source:/opt/src/dmp
-      # - logs:/var/log
+      - logs:/var/log
+      # - dmp_app_source:/opt/src/dmp
     depends_on:
       - dmp_app
     ports:
