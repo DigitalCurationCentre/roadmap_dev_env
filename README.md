@@ -24,6 +24,25 @@ $ psql "dbname=${POSTGRES_DB} host=db user=${POSTGRES_USER} password=${POSTGRES_
 $ exit
 ```
 
+## Updated for latest Docker setup
+
+Can load db dumps in the following manner:
+
+```
+$ cat dmponline.psql | docker exec -i roadmap_dev_env_db_1 sh -c 'psql -U ${POSTGRES_USER} ${POSTGRES_DB}'
+```
+
+```
+$ gunzip < dmponline.psql.gz | docker exec -i roadmap_dev_env_db_1 sh -c 'psql -U ${POSTGRES_USER} ${POSTGRES_DB}'
+```
+
+Then, run migrations:
+
+```
+$ docker-compose -f docker-compose.prod.yml run --rm dmp_app rake db:migrate
+``` 
+
+
 ## Run
 
 ```

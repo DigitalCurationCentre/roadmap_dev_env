@@ -45,9 +45,9 @@ services:
     volumes:
       - db_volume:/var/lib/postgresql/data
     env_file:
-      - ./.env
+      - ./.envs/.prod/dmp/.env
       
 volumes:
-  db_volume:
   dmp_app_source:
-  # logs:
+  db_volume:
+  logs:
