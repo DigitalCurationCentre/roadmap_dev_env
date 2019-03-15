@@ -1,0 +1,7 @@
+**/*.md
+**/.DS_Store
+**/.git*
+**/.travis.yml
+**/*README*
+**/doc*
+**/tmp*
