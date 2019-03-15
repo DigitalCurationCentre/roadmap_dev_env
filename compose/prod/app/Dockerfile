@@ -44,7 +44,7 @@ WORKDIR $RAILS_ROOT
 
 # Interpolate variables in configuration files
 COPY ./compose/prod/app/puma.rb /tmp/puma/
-COPY ./Gemfile.custom /tmp/roadmap-extension/
+COPY ./compose/prod/app/Gemfile.custom /tmp/roadmap-extension/
 
 RUN envsubst < /tmp/puma/puma.rb > $RAILS_ROOT/config/puma.rb && \
     envsubst < /tmp/roadmap-extension/Gemfile.custom  > $RAILS_ROOT/Gemfile.custom && \
