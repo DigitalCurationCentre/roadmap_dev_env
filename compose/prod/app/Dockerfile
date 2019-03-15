@@ -9,8 +9,8 @@ RUN apt-get update -qq && \
  git \
  imagemagick \
 && rm -rf /var/lib/apt/lists/* \
-&& rm -Rf /usr/share/doc \
-&& rm -Rf /usr/share/man \
+&& rm -rf /usr/share/doc \
+&& rm -rf /usr/share/man \
 && apt-get clean
 
 # Build args are passed in via compose file
@@ -52,10 +52,17 @@ RUN envsubst < /tmp/puma/puma.rb > $RAILS_ROOT/config/puma.rb && \
     bash -c 'mkdir -p puma/${SERVICE_NAME}/{sockets,pids,log}' 
 
 RUN gem install bundler && \
-    bundle install --without mysql thin
+    bundle install --without mysql thin and test and development \
+     # Remove unneeded files (cached *.gem, *.o, *.c)
+ && rm -rf /usr/local/bundle/cache/*.gem \
+ && find /usr/local/bundle/gems/ -name "*.c" -delete \
+ && find /usr/local/bundle/gems/ -name "*.o" -delete
 
 # Precompile assets with nulldb
 RUN DATABASE_URL='nulldb://nohost' bundle exec rake assets:precompile
+
+# Remove folders not needed in resulting image
+RUN rm -rf node_modules tmp/cache app/assets vendor/assets lib/assets spec
 
 EXPOSE $PUMA_PORT
 
