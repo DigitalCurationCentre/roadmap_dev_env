@@ -63,17 +63,16 @@ COPY --from=Builder  /tmp/Gemfile.custom $RAILS_ROOT/Gemfile.custom
 COPY --from=Builder  /tmp/puma.rb $RAILS_ROOT/config/puma.rb
 
 RUN gem install bundler && \
-    bundle install --without mysql thin and test and development \
+    bundle install --without mysql thin test development \
      # Remove unneeded files (cached *.gem, *.o, *.c)
  && rm -rf /usr/local/bundle/cache/*.gem \
  && find /usr/local/bundle/gems/ -name "*.c" -delete \
- && find /usr/local/bundle/gems/ -name "*.o" -delete
+ && find /usr/local/bundle/gems/ -name "*.o" -delete \
+ # Remove folders not needed in resulting image
+ && rm -rf node_modules tmp/cache app/assets vendor/assets lib/assets spec
 
 # Precompile assets with nulldb
 RUN DATABASE_URL='nulldb://nohost' bundle exec rake assets:precompile
-
-# Remove folders not needed in resulting image
-RUN rm -rf node_modules tmp/cache app/assets vendor/assets lib/assets spec
 
 EXPOSE $PUMA_PORT
 
