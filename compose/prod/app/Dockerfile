@@ -1,3 +1,20 @@
+# Interpolate variable in config file in separate image first
+FROM alpine as Builder
+
+RUN apk add --update --no-cache gettext
+
+ARG SRC_ROOT=/opt/src
+ARG SERVICE_NAME=dmp
+ARG PUMA_PORT
+ENV RAILS_ROOT=${SRC_ROOT}/${SERVICE_NAME} 
+ARG ROADMAP_EXTENSION_VERSION
+
+COPY ./compose/prod/app/puma.rb /tmp/puma/
+COPY ./compose/prod/app/Gemfile.custom /tmp/roadmap-extension/
+
+RUN  envsubst < /tmp/roadmap-extension/Gemfile.custom  > /tmp/Gemfile.custom && \
+     envsubst < /tmp/puma/puma.rb > /tmp/puma.rb
+
 FROM starefossen/ruby-node:2-10-slim
 
 RUN apt-get update -qq && \
@@ -5,7 +22,6 @@ RUN apt-get update -qq && \
  build-essential \
  libpq-dev \
  wkhtmltopdf \
- gettext-base \
  git \
  imagemagick \
 && rm -rf /var/lib/apt/lists/* \
@@ -16,7 +32,6 @@ RUN apt-get update -qq && \
 # Build args are passed in via compose file
 ARG SRC_ROOT=/opt/src
 ARG SERVICE_NAME=dmp
-ARG PUMA_PORT
 ARG ROADMAP_EXTENSION_VERSION
 ARG GITHUB_TOKEN
 ARG RAILS_ENV
@@ -42,14 +57,12 @@ WORKDIR $RAILS_ROOT/config
 RUN mv branding.yml.sample branding.yml
 WORKDIR $RAILS_ROOT
 
-# Interpolate variables in configuration files
-COPY ./compose/prod/app/puma.rb /tmp/puma/
-COPY ./compose/prod/app/Gemfile.custom /tmp/roadmap-extension/
-
-RUN envsubst < /tmp/puma/puma.rb > $RAILS_ROOT/config/puma.rb && \
-    envsubst < /tmp/roadmap-extension/Gemfile.custom  > $RAILS_ROOT/Gemfile.custom && \
-    mkdir /var/log/${SERVICE_NAME} && \
+RUN mkdir /var/log/${SERVICE_NAME} && \
     bash -c 'mkdir -p puma/${SERVICE_NAME}/{sockets,pids,log}' 
+
+# Copy interpolated variables in configuration files
+COPY --from=Builder  /tmp/Gemfile.custom $RAILS_ROOT/Gemfile.custom
+COPY --from=Builder  /tmp/puma.rb $RAILS_ROOT/config/puma.rb
 
 RUN gem install bundler && \
     bundle install --without mysql thin and test and development \
