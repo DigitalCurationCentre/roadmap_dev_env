@@ -1,13 +1,16 @@
+# Build args are passed in via compose file
+ARG SRC_ROOT=/opt/src
+ARG SERVICE_NAME=dmp
+ARG ROADMAP_EXTENSION_VERSION
+ARG GITHUB_TOKEN
+ARG RAILS_ENV
+
 # Interpolate variable in config file in separate image first
 FROM alpine as Builder
 
 RUN apk add --update --no-cache gettext
 
-ARG SRC_ROOT=/opt/src
-ARG SERVICE_NAME=dmp
-ARG PUMA_PORT
 ENV RAILS_ROOT=${SRC_ROOT}/${SERVICE_NAME} 
-ARG ROADMAP_EXTENSION_VERSION
 
 COPY ./compose/prod/app/puma.rb /tmp/puma/
 COPY ./compose/prod/app/Gemfile.custom /tmp/roadmap-extension/
@@ -15,6 +18,7 @@ COPY ./compose/prod/app/Gemfile.custom /tmp/roadmap-extension/
 RUN  envsubst < /tmp/roadmap-extension/Gemfile.custom  > /tmp/Gemfile.custom && \
      envsubst < /tmp/puma/puma.rb > /tmp/puma.rb
 
+# Main image
 FROM starefossen/ruby-node:2-10-slim
 
 RUN apt-get update -qq && \
@@ -29,12 +33,6 @@ RUN apt-get update -qq && \
 && rm -rf /usr/share/man \
 && apt-get clean
 
-# Build args are passed in via compose file
-ARG SRC_ROOT=/opt/src
-ARG SERVICE_NAME=dmp
-ARG ROADMAP_EXTENSION_VERSION
-ARG GITHUB_TOKEN
-ARG RAILS_ENV
 
 # Get rails env (production/development from environment variable)
 ENV RAILS_ENV=${RAILS_ENV}
