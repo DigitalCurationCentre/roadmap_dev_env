@@ -8,7 +8,10 @@ RUN apt-get update && \
  --no-install-recommends shibboleth-sp2-utils \
  libapache2-mod-shib2 \
  supervisor \
- && rm -r /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && rm -rf /usr/share/doc \
+ && rm -rf /usr/share/man \
+ && apt-get clean
 
 # Build args from compose
 ARG SERVICE_NAME=dmp

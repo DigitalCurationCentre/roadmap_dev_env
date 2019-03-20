@@ -1,16 +1,17 @@
-# Build args are passed in via compose file
-ARG SRC_ROOT=/opt/src
-ARG SERVICE_NAME=dmp
-ARG ROADMAP_EXTENSION_VERSION
-ARG GITHUB_TOKEN
-ARG RAILS_ENV
-
 # Interpolate variable in config file in separate image first
 FROM alpine as Builder
 
 RUN apk add --update --no-cache gettext
 
+ARG SRC_ROOT=/opt/src
+ARG SERVICE_NAME=dmp
+ARG ROADMAP_EXTENSION_VERSION
+ARG GITHUB_TOKEN
+ARG RAILS_ENV
+ARG PUMA_PORT
+
 ENV RAILS_ROOT=${SRC_ROOT}/${SERVICE_NAME} 
+# ENV PUMA_PORT=${PUMA_PORT}
 
 COPY ./compose/prod/app/puma.rb /tmp/puma/
 COPY ./compose/prod/app/Gemfile.custom /tmp/roadmap-extension/
@@ -33,6 +34,11 @@ RUN apt-get update -qq && \
 && rm -rf /usr/share/man \
 && apt-get clean
 
+ARG SRC_ROOT=/opt/src
+ARG SERVICE_NAME=dmp
+ARG ROADMAP_EXTENSION_VERSION
+ARG GITHUB_TOKEN
+ARG RAILS_ENV
 
 # Get rails env (production/development from environment variable)
 ENV RAILS_ENV=${RAILS_ENV}
@@ -67,12 +73,13 @@ RUN gem install bundler && \
      # Remove unneeded files (cached *.gem, *.o, *.c)
  && rm -rf /usr/local/bundle/cache/*.gem \
  && find /usr/local/bundle/gems/ -name "*.c" -delete \
- && find /usr/local/bundle/gems/ -name "*.o" -delete \
- # Remove folders not needed in resulting image
- && rm -rf node_modules tmp/cache app/assets vendor/assets lib/assets spec
+ && find /usr/local/bundle/gems/ -name "*.o" -delete 
 
 # Precompile assets with nulldb
 RUN DATABASE_URL='nulldb://nohost' bundle exec rake assets:precompile
+
+# Remove folders not needed in resulting image
+RUN rm -rf node_modules tmp/cache app/assets vendor/assets lib/assets spec
 
 EXPOSE $PUMA_PORT
 
