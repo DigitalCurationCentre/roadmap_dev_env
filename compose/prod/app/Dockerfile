@@ -11,7 +11,6 @@ ARG RAILS_ENV
 ARG PUMA_PORT
 
 ENV RAILS_ROOT=${SRC_ROOT}/${SERVICE_NAME} 
-# ENV PUMA_PORT=${PUMA_PORT}
 
 COPY ./compose/prod/app/puma.rb /tmp/puma/
 COPY ./compose/prod/app/Gemfile.custom /tmp/roadmap-extension/
