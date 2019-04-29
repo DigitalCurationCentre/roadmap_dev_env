@@ -1,17 +1,16 @@
-FROM httpd:2.4
+FROM unicon/shibboleth-sp
 
-# Need gettext for envsubst
-RUN apt-get update && \
- apt-get -y install \
- gettext-base \
- build-essential \
- --no-install-recommends shibboleth-sp2-utils \
- libapache2-mod-shib2 \
- supervisor \
- && rm -rf /var/lib/apt/lists/* \
- && rm -rf /usr/share/doc \
- && rm -rf /usr/share/man \
- && apt-get clean
+# Gettext needed from envsubst command below
+RUN yum -y install gettext && \
+export LD_LIBRARY_PATH=/opt/shibboleth/lib64:$LD_LIBRARY_PATH
+
+COPY ./compose/prod/apache/shibboleth/* /etc/shibboleth/
+
+# Copy the Apache modules and other config
+COPY /compose/prod/apache/conf.modules.d/* /etc/httpd/conf.modules.d/
+COPY /compose/prod/apache/conf.d/* /etc/httpd/conf.d/
+
+RUN chown -R shibd:shibd /etc/shibboleth/
 
 # Build args from compose
 ARG SERVICE_NAME=dmp
@@ -26,19 +25,11 @@ COPY ./compose/prod/apache/sites-enabled/vhost_template.conf /tmp/sites-enabled/
 COPY ./compose/prod/apache/conf/httpd.conf /tmp/conf/httpd.conf
 
 # Interpolate variables and copy to sites-enabled
-RUN mkdir -p /usr/local/apache2/sites-enabled/ && \
+RUN mkdir -p /etc/httpd/sites-enabled/ && \
     bash -c 'mkdir -p $BASE_LOG_DIR/${SERVICE_NAME}' && \
-    envsubst < /tmp/sites-enabled/${SERVICE_NAME}.dcc.ac.uk.conf > /usr/local/apache2/sites-enabled/${SERVICE_NAME}.dcc.ac.uk.conf && \
-    envsubst < /tmp/conf/httpd.conf > /usr/local/apache2/conf/httpd.conf
+    envsubst < /tmp/sites-enabled/${SERVICE_NAME}.dcc.ac.uk.conf > /etc/httpd/sites-enabled/${SERVICE_NAME}.dcc.ac.uk.conf && \
+    envsubst < /tmp/conf/httpd.conf > /etc/httpd/conf/httpd.conf
 
 # Copy the Apache modules and other config
-COPY /compose/prod/apache/conf.modules.d/* /usr/local/apache2/conf.modules.d/
-COPY /compose/prod/apache/conf.d/* /usr/local/apache2/conf.d/
-
-#####################################
-
-# TODO shib daemon
-COPY supervisord/supervisor-app.conf /etc/supervisor/conf.d/
-
-# Start supervisord in foreground
-CMD ["supervisord", "-n"]
+COPY /compose/prod/apache/conf.modules.d/* /etc/httpd/conf.modules.d/
+COPY /compose/prod/apache/conf.d/* /etc/httpd/conf.d/
