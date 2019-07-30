@@ -14,9 +14,9 @@ services:
       - ./config/initializers/wicked_pdf.rb:/usr/src/app/config/initializers/wicked_pdf.rb:cached
       - ./db_backups/:/tmp/dat/:cached
       - ~/work/forks/rails:/usr/gems/rails:cached
-      - ./scripts/start_puma_server.sh:/usr/src/app/start_puma_server:cached
+      - ./scripts:/usr/src/app/scripts:cached
       - bundle:/bundle
-    command: /usr/src/app/start_puma_server
+    command: /usr/src/app/scripts/start_puma_server.sh
     ports:
       - "3000:3000"
     env_file:
