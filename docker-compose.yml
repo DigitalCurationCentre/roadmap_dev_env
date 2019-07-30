@@ -4,17 +4,18 @@ services:
     build:
       context: ./
     volumes:
-      - ./roadmap:/usr/src/app
-      - ./config/branding.yml:/usr/src/app/config/branding.yml
-      - ./config/database.yml:/usr/src/app/config/database.yml
-      - ./config/secrets.yml:/usr/src/app/config/secrets.yml
-      - ./config/initializers/contact_us.rb:/usr/src/app/config/initializers/contact_us.rb
-      - ./config/initializers/devise.rb:/usr/src/app/config/initializers/devise.rb
-      - ./config/initializers/recaptcha.rb:/usr/src/app/config/initializers/recaptcha.rb
-      - ./config/initializers/wicked_pdf.rb:/usr/src/app/config/initializers/wicked_pdf.rb
-      - ./db_backups/:/tmp/dat/
-      - ~/work/forks/rails:/usr/gems/rails
-      - ./scripts/start_puma_server.sh:/usr/src/app/start_puma_server
+      - ./roadmap:/usr/src/app:cached
+      - ./config/branding.yml:/usr/src/app/config/branding.yml:cached
+      - ./config/database.yml:/usr/src/app/config/database.yml:cached
+      - ./config/secrets.yml:/usr/src/app/config/secrets.yml:cached
+      - ./config/initializers/contact_us.rb:/usr/src/app/config/initializers/contact_us.rb:cached
+      - ./config/initializers/devise.rb:/usr/src/app/config/initializers/devise.rb:cached
+      - ./config/initializers/recaptcha.rb:/usr/src/app/config/initializers/recaptcha.rb:cached
+      - ./config/initializers/wicked_pdf.rb:/usr/src/app/config/initializers/wicked_pdf.rb:cached
+      - ./db_backups/:/tmp/dat/:cached
+      - ~/work/forks/rails:/usr/gems/rails:cached
+      - ./scripts/start_puma_server.sh:/usr/src/app/start_puma_server:cached
+      - bundle:/bundle
     command: /usr/src/app/start_puma_server
     ports:
       - "3000:3000"
@@ -31,3 +32,4 @@ services:
       - ./.env
 volumes:
   db_volume:
+  bundle:

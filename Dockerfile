@@ -13,6 +13,10 @@ RUN apt-get update -qq && \
 
 ARG INSTALL_PATH=/usr/src/app
 ENV INSTALL_PATH $INSTALL_PATH
+ENV BUNDLE_PATH=/bundle/ \
+    BUNDLE_BIN=/bundle/bin \
+    GEM_HOME=/bundle
+ENV Path="${BUNDLE_BIN}:${PATH}"
 
 WORKDIR $INSTALL_PATH
 
@@ -23,10 +27,14 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 RUN apt-get install -y nodejs
 RUN apt-get update && apt-get install -y yarn
 
+# Chrome for chromedriver tests
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+
 # re-build from here if Gemfile or .lock change
-COPY ./roadmap/Gemfile* ./
-RUN gem install bundler
-RUN bundle install --without mysql thin
+# COPY ./roadmap/Gemfile* ./
+# RUN gem install bundler
+# RUN bundle install --without mysql thin
 
 # expose correct port
 EXPOSE 3000
