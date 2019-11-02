@@ -7,7 +7,6 @@ RUN apt-get update -qq && \
   git \
   libgmp3-dev \
   libpq-dev \
-  wkhtmltopdf \
   postgresql-client \
   gettext
 
@@ -26,6 +25,10 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get install -y nodejs
 RUN apt-get update && apt-get install -y yarn
+RUN wget --quiet https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
+    tar vxf wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
+    cp wkhtmltox/bin/wk* /usr/local/bin/ && \
+    rm -rf wkhtmltox
 
 # Chrome for chromedriver tests
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
