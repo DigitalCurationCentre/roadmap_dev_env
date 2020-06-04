@@ -1,4 +1,4 @@
-FROM ruby:2.4.4
+FROM ruby:2.6.3
 
 # Dependancies
 RUN apt-get update -qq && \
@@ -8,7 +8,8 @@ RUN apt-get update -qq && \
   libgmp3-dev \
   libpq-dev \
   postgresql-client \
-  gettext
+  gettext \
+  vim
 
 ARG INSTALL_PATH=/usr/src/app
 ENV INSTALL_PATH $INSTALL_PATH
@@ -35,9 +36,11 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
 
 # re-build from here if Gemfile or .lock change
-# COPY ./roadmap/Gemfile* ./
-# RUN gem install bundler
-# RUN bundle install --without mysql thin
+COPY ./roadmap/Gemfile* ./
+RUN gem install bundler
+RUN bundle config set without 'mysql thin'
+RUN bundle install
+RUN yarn install
 
 # expose correct port
 EXPOSE 3000
