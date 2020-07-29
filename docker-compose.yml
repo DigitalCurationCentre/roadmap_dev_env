@@ -19,11 +19,19 @@ services:
       - bundle:/bundle
     command: /usr/src/app/scripts/start_puma_server.sh
     ports:
-      - "3000:3000"
+      - "3002:3000"
     env_file:
       - ./.env
+    environment:
+      - DEV_MAIL_HOST=mailcatcher
     depends_on:
       - db
+
+  mailcatcher:
+   image: zolweb/docker-mailcatcher:latest
+   ports:
+    - "1025:1025"
+    - "1080:1080"
 
   db:
     image: postgres:9.5.5
