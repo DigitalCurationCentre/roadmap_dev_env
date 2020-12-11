@@ -259,28 +259,27 @@ Devise.setup do |config|
 
   # Any entries here MUST match a corresponding entry in the identifier_schemes table as
   # well as an identifier_schemes.schemes section in each locale file!
-  OmniAuth.config.full_host = "https://my_service.hostname"
-  OmniAuth.config.allowed_request_methods = [:post]
+  OmniAuth.config.full_host = 'https://dmptuuli.fi'
 
-  config.omniauth :orcid,
-                  "client_id", "client_secret",
-                  {
-                    # member: false,
-                  }
+  config.omniauth :orcid, 
+  'APP-O7Z6ASPJL8YIX9V8',  '981506b0-d6ad-4e45-bd6d-65b8720d242f',
+  {
+    member: false,
+  }
 
-  config.omniauth :shibboleth,
-                  {
-                    # debug: true,
-                    # uid_field:                 "HTTP_REMOTE_USER",
-                    # shib_application_id_field: "HTTP_SHIB_APPLICATION_ID",
-                    # shib_session_id_field:     "HTTP_SHIB_SESSION_ID",
-                    fields: [],
-                    info_fields: {
-                      # affiliation: "HTTP_AFFILIATION",
-                    },
-                    extra_fields: []
-                  }
-
+  config.omniauth :shibboleth, 
+  {
+    uid_field:                 "Remote-User",
+    shib_application_id_field: "Shib-Application-ID",
+    shib_session_id_field:     "Shib-Session-ID",
+    fields: [],
+    info_fields: {
+      affiliation: "HTTP_AFFILIATION",
+    },
+    extra_fields: [],
+    request_type: :header
+  }
+  
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.

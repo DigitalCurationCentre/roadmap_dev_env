@@ -1,12 +1,15 @@
 #!/bin/bash
 set -e
 
-bundle check || bundle update 
+bundle install --with rollbar
 
 bundle exec rake assets:precompile
 
-rm log/development.log
+# rm log/development.log
+rm log/production.log
+touch log/production.log
 
-touch log/development.log
+# touch log/development.log
 
 bundle exec puma -C config/puma.rb
+

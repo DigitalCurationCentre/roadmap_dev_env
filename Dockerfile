@@ -11,6 +11,11 @@ RUN apt-get update -qq && \
   gettext \
   vim
 
+RUN touch ~/.bashrc
+RUN echo "alias rails='bundle exec rails'" >> ~/.bashrc
+RUN echo "export EDITOR=vim" >> ~/.bashrc
+
+
 ARG INSTALL_PATH=/usr/src/app
 ENV INSTALL_PATH $INSTALL_PATH
 ENV BUNDLE_PATH=/bundle/ \
@@ -27,9 +32,9 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 RUN apt-get install -y nodejs
 RUN apt-get update && apt-get install -y yarn
 RUN wget --quiet https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
-    tar vxf wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
-    cp wkhtmltox/bin/wk* /usr/local/bin/ && \
-    rm -rf wkhtmltox
+   tar vxf wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
+   cp wkhtmltox/bin/wk* /usr/local/bin/ && \
+   rm -rf wkhtmltox
 
 # Chrome for chromedriver tests
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -44,3 +49,4 @@ RUN yarn install
 
 # expose correct port
 EXPOSE 3000
+

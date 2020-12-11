@@ -3,43 +3,40 @@ services:
   server:
     build:
       context: ./
-    container_name: dmp5_server
+    container_name: tuulitestserver
     volumes:
       - ./roadmap:/usr/src/app:consistent
-      - ./config/branding.yml:/usr/src/app/config/branding.yml:cached
       - ./config/database.yml:/usr/src/app/config/database.yml:cached
-      - ./config/secrets.yml:/usr/src/app/config/secrets.yml:cached
-      - ./config/initializers/contact_us.rb:/usr/src/app/config/initializers/contact_us.rb:cached
-      - ./config/initializers/devise.rb:/usr/src/app/config/initializers/devise.rb:cached
-      - ./config/initializers/recaptcha.rb:/usr/src/app/config/initializers/recaptcha.rb:cached
       - ./config/initializers/wicked_pdf.rb:/usr/src/app/config/initializers/wicked_pdf.rb:cached
-      - ./db_backups/:/tmp/dat/:cached
+      - ./config/master.key:/usr/src/app/config/master.key:cached
+      - ./customisation/config/initializers/contact_us.rb:/usr/src/app/config/initializers/contact_us.rb:cached
+      - ./customisation/config/application.rb:/usr/src/app/config/application.rb:cached
+      - ./customisation/assets/stylesheets/variables/_colours.scss:/usr/src/app/app/assets/stylesheets/variables/_colours.scss:cached
+      - ./customisation/assets/stylesheets/blocks/_footers.scss:/usr/src/app/app/assets/stylesheets/blocks/_footers.scss:cached
+      - ./customisation/assets/images/favicon.ico:/usr/src/app/app/assets/images/favicon.ico:cached
+      - ./customisation/assets/images/logo.png:/usr/src/app/app/assets/images/logo.png:cached
+      - ./customisation/assets/images/powered_by_DMP_grey.png:/usr/src/app/app/assets/images/powered_by_DMP_grey.png:cached
+      - ./customisation/branded:/usr/src/app/app/views/branded:cached
+      - ./customisation/config/branding.yml:/usr/src/app/config/branding.yml:cached
+      - ./customisation/config/initializers/devise.rb:/usr/src/app/config/initializers/devise.rb:cached
+      - /var/data/backups/:/tmp/backups/
       - ./scripts:/usr/src/app/scripts:cached
-      - ~/Work/roadmap-extension:/usr/gems/roadmap_extension:cached
-      - bundle:/bundle
+      - bundle:/bundle:cached
     command: /usr/src/app/scripts/start_puma_server.sh
     ports:
-      - "3002:3000"
+      - "3011:3000"
     env_file:
       - ./.env
-    environment:
-      - DEV_MAIL_HOST=mailcatcher
     depends_on:
       - db
 
-  mailcatcher:
-   image: zolweb/docker-mailcatcher:latest
-   ports:
-    - "1025:1025"
-    - "1080:1080"
-
   db:
     image: postgres:9.5.5
-    container_name: dmp5_db
+    container_name: tuuli_test_db
     volumes:
-      - db5_volume:/var/lib/postgresql/data
+      - db_volume:/var/lib/postgresql/data
     env_file:
       - ./.env
 volumes:
-  db5_volume:
+  db_volume:
   bundle:

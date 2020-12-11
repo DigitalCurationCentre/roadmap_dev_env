@@ -1,0 +1,19 @@
+/* For sticky footer */
+#footer-navbar {
+  /* TUULI CHANGES */
+  border-top: 3px solid #009fd7;
+  padding-top: 3px;
+  background-color: #e7e7e7;
+  .navbar-nav>li>a {
+    color: #606060;
+  }
+  /* END TUULI CHANGES */
+  margin-bottom: 0px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-radius:0px;
+  ul {
+    padding-right: $grid-gutter-width / 2;
+  }
+}
