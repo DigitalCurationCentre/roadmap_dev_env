@@ -1,1 +1,5 @@
-ndb_backups/*
+db_backups/**
+roadmap
+roadmap/**
+master.key
+credentials.yml.enc

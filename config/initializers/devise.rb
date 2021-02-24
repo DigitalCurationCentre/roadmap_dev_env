@@ -1,12 +1,15 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
+# rubocop:disable Metrics/BlockLength
 Devise.setup do |config|
 
-  config.secret_key = '{secret_key}'  
+  #config.secret_key = Rails.application.credentials.secret_key
+  config.secret_key = ENV["SECRET_KEY"]
+
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
-  config.mailer_sender = "example@email.address"
+  config.mailer_sender = "do-not-reply@dcc.ac.uk"
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"
@@ -15,7 +18,7 @@ Devise.setup do |config|
   # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (bson_ext recommended) by default. Other ORMs may be
   # available as additional gems.
-  require 'devise/orm/active_record'
+  require "devise/orm/active_record"
 
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is
@@ -37,12 +40,12 @@ Devise.setup do |config|
   # Configure which authentication keys should be case-insensitive.
   # These keys will be downcased upon creating or modifying a user and when used
   # to authenticate or find a user. Default is :email.
-  config.case_insensitive_keys = [ :email ]
+  config.case_insensitive_keys = [:email]
 
   # Configure which authentication keys should have whitespace stripped.
   # These keys will have whitespace before and after removed upon creating or
   # modifying a user and when used to authenticate or find a user. Default is :email.
-  config.strip_whitespace_keys = [ :email ]
+  config.strip_whitespace_keys = [:email]
 
   # Tell if authentication through request.params is enabled. True by default.
   # It can be set to an array that will enable params authentication only for the
@@ -61,7 +64,7 @@ Devise.setup do |config|
   # config.http_authenticatable = false
 
   # If http headers should be returned for AJAX requests. True by default.
-  # config.http_authenticatable_on_xhr = true
+  config.http_authenticatable_on_xhr = false
 
   # The realm used in Http Basic Authentication. "Application" by default.
   # config.http_authentication_realm = "Application"
@@ -88,7 +91,8 @@ Devise.setup do |config|
   	config.stretches = Rails.env.test? ? 1 : 10
 
   # Setup a pepper to generate the encrypted password.
-  config.pepper = "EXAMPLE OF PEPPER TO GENERATE THE ENCRYPTED PASSWORD"
+  #config.pepper = Rails.application.credentials.devise_pepper
+  config.pepper = "de451fa8d44af2c286d922f753d1b10fd23b99c10747143d9ba118988b9fa9601fea66bfe31266ffc6a331dc7331c71ebe845af8abcdb84c24b42b8063386530"
   
   # ==> Configuration for :invitable
   # The period the generated invitation token is valid, after
@@ -238,7 +242,7 @@ Devise.setup do |config|
   # should add them to the navigational formats lists.
   #
   # The "*/*" below is required to match Internet Explorer requests.
-  # config.navigational_formats = ["*/*", :html]
+  config.navigational_formats = ["*/*", :html, :js]
 
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :delete
@@ -250,26 +254,33 @@ Devise.setup do |config|
   
   # Any entries here MUST match a corresponding entry in the identifier_schemes table as
   # well as an identifier_schemes.schemes section in each locale file!
-  OmniAuth.config.full_host = 'https://my_service.hostname'
+  OmniAuth.config.full_host = "https://dmponline.dcc.ac.uk"
+  #OmniAuth.config.allowed_request_methods = [:post]
 
-  config.omniauth :orcid, 
-  'client_id', 'client_secret', 
+  config.omniauth :orcid,
+  'APP-JWV2MYYLT5E8TB5U',  '28155ac1-27ea-4b88-81e1-b77e9b3fedde',
   {
-    #member: false,
+    debug: true,
+    member: false,
   }
 
-  config.omniauth :shibboleth, 
+  config.omniauth :shibboleth,
   {
-    #debug: true,
-    #uid_field:                 "HTTP_REMOTE_USER",
-    #shib_application_id_field: "HTTP_SHIB_APPLICATION_ID",
-    #shib_session_id_field:     "HTTP_SHIB_SESSION_ID",
+#    debug: true,
+#    uid_field:                 "HTTP_REMOTE_USER",
+#    shib_application_id_field: "HTTP_SHIB_APPLICATION_ID",
+#    shib_session_id_field:     "HTTP_SHIB_SESSION_ID",
+    uid_field:                 "Remote-User",
+    shib_application_id_field: "Shib-Application-ID",
+    shib_session_id_field:     "Shib-Session-ID",
     fields: [],
     info_fields: {
-      #affiliation: "HTTP_AFFILIATION",
+      affiliation: "HTTP_AFFILIATION",
     },
     extra_fields: [],
+    request_type: :header,
   }
+              
   
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
@@ -299,3 +310,4 @@ Devise.setup do |config|
   end
   
 end
+# rubocop:enable Metrics/BlockLength

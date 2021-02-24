@@ -4,21 +4,46 @@ services:
     build:
       context: ./
     volumes:
-      - ./roadmap:/usr/src/app:cached
+      - ./roadmap:/usr/src/app:consistent
+      - ./config/package.json:/usr/src/app/package.json
       - ./config/branding.yml:/usr/src/app/config/branding.yml:cached
       - ./config/database.yml:/usr/src/app/config/database.yml:cached
       - ./config/secrets.yml:/usr/src/app/config/secrets.yml:cached
-      - ./config/initializers/contact_us.rb:/usr/src/app/config/initializers/contact_us.rb:cached
+        #- ./config/initializers/contact_us.rb:/usr/src/app/config/initializers/contact_us.rb:cached
       - ./config/initializers/devise.rb:/usr/src/app/config/initializers/devise.rb:cached
       - ./config/initializers/recaptcha.rb:/usr/src/app/config/initializers/recaptcha.rb:cached
+      - ./config/initializers/dragonfly.rb:/usr/src/app/config/initializers/dragonfly.rb
       - ./config/initializers/wicked_pdf.rb:/usr/src/app/config/initializers/wicked_pdf.rb:cached
-      - ./db_backups/:/tmp/dat/:cached
-      - ~/work/forks/rails:/usr/gems/rails:cached
+      - ./config/environments/production.rb:/usr/src/app/config/environments/production.rb:cached
+      - ./config/initializers/external_apis/open_aire.rb:/usr/src/app/config/initializers/external_apis/open_aire.rb:cached
+      - ./config/initializers/external_apis/ror.rb:/usr/src/app/config/initializers/external_apis/ror.rb:cached
+      - ./config/boot.rb:/usr/src/app/config/boot.rb:cached
+      - ./config/application.rb:/usr/src/app/config/application.rb:cached
+      - ./config/credentials.yml.sample:/usr/src/app/config/credentials.yml.sample:consistent
+      - ./config/master.key:/usr/src/app/config/master.key:cached
+      - ./config/public/accessibility_statement.pdf:/usr/src/app/public/accessibility_statement.pdf:cached
+      - ./config/initializers/session_store.rb:/usr/src/app/config/initializers/session_store.rb:cached
+      - ./patches/app/controllers/concerns/paginable.rb:/usr/src/app/app/controllers/concerns/paginable.rb:cached
+      - ./patches/app/helpers/manifests_helper.rb:/usr/src/app/app/helpers/manifests_helper.rb:cached
+        #- ./patches/app/views/layouts/_navigation.html.erb:/usr/src/app/app/views/layouts/_navigation.html.erb
+      - ./patches/app/views/layouts/_footer.html.erb:/usr/src/app/app/views/layouts/_footer.html.erb
+      - ./patches/app/views/super_admin/users/edit.html.erb:/usr/src/app/app/views/super_admin/users/edit.html.erb:cached
+      - ./style_patches/app/assets/stylesheets/blocks/_buttons.scss:/usr/src/app/app/assets/stylesheets/blocks/_buttons.scss:cached
+      - ./style_patches/app/assets/stylesheets/blocks/_clearable_field.scss:/usr/src/app/app/assets/stylesheets/blocks/_clearable_field.scss:cached
+      - ./style_patches/app/assets/stylesheets/blocks/_html.scss:/usr/src/app/app/assets/stylesheets/blocks/_html.scss:cached
+      - ./style_patches/app/assets/stylesheets/variables/_bootstrap.scss:/usr/src/app/app/assets/stylesheets/variables/_bootstrap.scss:cached
+      - ./style_patches/app/assets/stylesheets/variables/_site_overrides.scss:/usr/src/app/app/assets/stylesheets/variables/_site_overrides.scss:cached
+      - ./style_patches/app/assets/stylesheets/variables/_colours.scss:/usr/src/app/app/assets/stylesheets/variables/_colours.scss:cached
+      - ./db_backups/:/tmp/backups/:cached
       - ./scripts:/usr/src/app/scripts:cached
+      - /var/data/logs/puma/dmponline/:/usr/src/app/log/
       - bundle:/bundle
+
+        #- ./config/credentials.yml.enc:/usr/src/app/config/credentials.yml.enc:cached
+
     command: /usr/src/app/scripts/start_puma_server.sh
     ports:
-      - "3000:3000"
+      - "2001:3000"
     env_file:
       - ./.env
     depends_on:

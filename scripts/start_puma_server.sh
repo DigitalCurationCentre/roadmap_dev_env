@@ -3,10 +3,8 @@ set -e
 
 bundle check || bundle update 
 
-bundle exec rake assets:precompile
+bundle exec rails assets:precompile
 
-rm log/development.log
-
-touch log/development.log
+touch log/production.log
 
 bundle exec puma -C config/puma.rb

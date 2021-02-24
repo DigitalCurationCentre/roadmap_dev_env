@@ -1,0 +1,3 @@
+eval_gemfile "Gemfile"
+gem 'roadmap-extension', git: "https://#{ENV['GITHUB_TOKEN']}:x-oauth-basic@github.com/DigitalCurationCentre/roadmap-extension.git", branch: 'deploy5'
+gem 'activerecord-session_store'
