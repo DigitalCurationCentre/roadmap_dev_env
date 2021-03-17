@@ -20,7 +20,6 @@ services:
       - ./config/boot.rb:/usr/src/app/config/boot.rb:cached
       - ./config/application.rb:/usr/src/app/config/application.rb:cached
       - ./config/credentials.yml.sample:/usr/src/app/config/credentials.yml.sample:consistent
-      - ./config/master.key:/usr/src/app/config/master.key:cached
       - ./config/public/accessibility_statement.pdf:/usr/src/app/public/accessibility_statement.pdf:cached
       - ./config/initializers/session_store.rb:/usr/src/app/config/initializers/session_store.rb:cached
       - ./patches/app/helpers/manifests_helper.rb:/usr/src/app/app/helpers/manifests_helper.rb:cached
