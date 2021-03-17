@@ -41,10 +41,10 @@ module DMPRoadmap
     # config.x.organisation.telephone = ""
     # Your organisation's address - used on the contact us page
     config.x.organisation.address = {
-      line1: "University of Edinburgh"
-      line2: "Argyle House"
-      line3: "3 Lady Lawson Street"
-      line4: "Edinburgh"
+      line1: "University of Edinburgh",
+      line2: "Argyle House",
+      line3: "3 Lady Lawson Street",
+      line4: "Edinburgh",
       country: "EH3 9DR"
     }
 
