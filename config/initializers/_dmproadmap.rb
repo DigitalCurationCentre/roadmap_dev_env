@@ -41,10 +41,10 @@ module DMPRoadmap
     # config.x.organisation.telephone = ""
     # Your organisation's address - used on the contact us page
     config.x.organisation.address = {
-      line1: "University of Edinburgh"
-      line2: "Argyle House"
-      line3: "3 Lady Lawson Street"
-      line4: "Edinburgh"
+      line1: "University of Edinburgh",
+      line2: "Argyle House",
+      line3: "3 Lady Lawson Street",
+      line4: "Edinburgh",
       country: "EH3 9DR"
     }
 
@@ -113,6 +113,8 @@ module DMPRoadmap
         }
       }
     }
+    # Setting to only take orgs from local and not allow on-the-fly creation
+    config.x.application.restrict_orgs = true
 
     # ------------------- #
     # SHIBBOLETH SETTINGS #

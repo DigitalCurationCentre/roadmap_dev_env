@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 # rubocop:disable Metrics/BlockLength
 Devise.setup do |config|
-
-  #config.secret_key = Rails.application.credentials.secret_key
-  config.secret_key = ENV["SECRET_KEY"]
+  config.secret_key = Rails.application.credentials.secret_key
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
-  # note that it will be overwritten if you use your own mailer class with default "from" parameter.
+  # note that it will be overwritten if you use your own mailer class with
+  # default "from" parameter.
   config.mailer_sender = "do-not-reply@dcc.ac.uk"
 
   # Configure the class responsible to send e-mails.
@@ -88,12 +89,16 @@ Devise.setup do |config|
   # Limiting the stretches to just one in testing will increase the performance of
   # your test suite dramatically. However, it is STRONGLY RECOMMENDED to not use
   # a value less than 10 in other environments.
-  	config.stretches = Rails.env.test? ? 1 : 10
+  config.stretches = Rails.env.test? ? 1 : 10
 
   # Setup a pepper to generate the encrypted password.
-  #config.pepper = Rails.application.credentials.devise_pepper
-  config.pepper = "de451fa8d44af2c286d922f753d1b10fd23b99c10747143d9ba118988b9fa9601fea66bfe31266ffc6a331dc7331c71ebe845af8abcdb84c24b42b8063386530"
-  
+  # the pepper is now set in credentials.yml.enc which can be edited by setting up
+  # the key in your environment with
+  # export RAILS_MASTER_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  # and then editing the credentials file with
+  # EDITOR=your_fave_editor rails credentials:edit
+  config.pepper = Rails.application.credentials.devise_pepper
+
   # ==> Configuration for :invitable
   # The period the generated invitation token is valid, after
   # this period, the invited resource won't be able to accept the invitation.
@@ -251,7 +256,7 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
-  
+
   # Any entries here MUST match a corresponding entry in the identifier_schemes table as
   # well as an identifier_schemes.schemes section in each locale file!
   OmniAuth.config.full_host = "https://dmponline.dcc.ac.uk"
@@ -304,10 +309,9 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   config.omniauth_path_prefix = "/users/auth"
-  
+
   config.warden do |manager|
     manager.failure_app = CustomFailure
   end
-  
 end
 # rubocop:enable Metrics/BlockLength

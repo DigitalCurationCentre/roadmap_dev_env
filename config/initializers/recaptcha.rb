@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
+require "recaptcha/rails"
+
+# the keys are set in config/credentials.yml.env
+
 Recaptcha.configure do |config|
-  #config.site_key = Rails.application.credentials.recaptcha[:site_key]
-  #config.secret_key = Rails.application.credentials.recaptcha[:secret_key]
-  config.site_key  = '6LcO9RQUAAAAAAlSp5UVsuY7WJpXnZaKvs0jaLk_'
-  config.secret_key = '6LcO9RQUAAAAANkv9aNE8QMiYz1AJoQe2Bnuz9KT'
-  config.proxy = 'http://someproxy.com:port'
+#  config.site_key = Rails.application.credentials.recaptcha[:site_key]
+#  config.secret_key = Rails.application.credentials.recaptcha[:secret_key]
+  config.proxy = "http://someproxy.com:port"
 end
