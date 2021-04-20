@@ -16,6 +16,7 @@ services:
       - ./config/application.rb:/usr/src/app/config/application.rb:cached
       - ./config/public/accessibility_statement.pdf:/usr/src/app/public/accessibility_statement.pdf:cached
       - ./config/initializers/session_store.rb:/usr/src/app/config/initializers/session_store.rb:cached
+      - ./patches/app/helpers/manifests_helper.rb:/usr/src/app/app/helpers/manifests_helper.rb:cached
       - ./patches/app/views/layouts/_navigation.html.erb:/usr/src/app/app/views/layouts/_navigation.html.erb
       - ./patches/app/views/layouts/_footer.html.erb:/usr/src/app/app/views/layouts/_footer.html.erb
       - ./config/initializers/recaptcha.rb:/usr/src/app/config/initializers/recaptcha.rb
