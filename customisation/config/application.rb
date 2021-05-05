@@ -3,12 +3,20 @@
 require_relative "boot"
 
 require "rails/all"
-
+require "sprockets/railtie"
 require "csv"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+
+## NEW CODE
+begin
+  #if Rollbar in Bundle, load
+  require "rollbar"
+rescue LoadError => e
+  # noop
+end
 
 module DMPRoadmap
 
@@ -25,8 +33,6 @@ module DMPRoadmap
     # --------------------------------- #
     # OVERRIDES TO DEFAULT RAILS CONFIG #
     # --------------------------------- #
-
-    config.logger = ActiveSupport::Logger.new("log/#{Rails.env}.log", "daily")
 
     config.autoload_paths += %W[#{config.root}/lib]
 
@@ -48,11 +54,17 @@ module DMPRoadmap
     config.action_controller.include_all_helpers = true
 
     # Set the default host for mailer URLs
-    config.action_mailer.default_url_options = { host: Socket.gethostname.to_s }
+    config.action_mailer.default_url_options = { host: "http://dmptuuli-test.dcc.ac.uk/"}
 
-    Rails.application.config.assets.configure do |env|
-      env.export_concurrent = false
-    end
+    ## ADDITIONS FOR RAILS 5 (from old config)
+    config.eager_load_paths << "app/presenters"
+    
+    # Note, skipping shibb config for the moment
+    config.default_plan_visibility = 'privately_visible'
+    
+    config.default_plan_percentage_answered = 50
+
+    config.action_controller.per_form_csrf_tokens = true
 
   end
 

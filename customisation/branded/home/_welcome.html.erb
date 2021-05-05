@@ -1,0 +1,17 @@
+<div>
+  <h1><%= _('Welcome')%></h1>
+  <p>
+      <%= raw _('Data management planning tool %{application_name} helps you to create, review, and share data management plans that meet institutional and funder requirements.') % {:application_name => ApplicationService.application_name, :organisation_name => Rails.configuration.x.organisation.name} %>
+  </p>
+  <p>
+      <%= raw _('Join the growing number of researchers that have adopted DMPTuuli:') %>
+  </p><br>
+  <p><div style="padding-right:30px"><div class="row text-center">
+        <div class="col-xs-4"><i class="fa fa-user fa-5x" style="font-size:5em;color:#333;"></i><h4> <%=number_with_delimiter(User.count, delimiter: ' ')+ ' ' + _( 'Users') %></h4></div>
+        <div class="col-xs-4"><i class="far fa-copy fa-5x" style="font-size:5em;color:#333;"></i><h4> <%=number_with_delimiter(Plan.count, delimiter: ' ')+ ' ' + _( 'Plans') %></h4></div>
+        <div class="col-xs-4"><i class="fa fa-university fa-5x" style="font-size:5em;color:#333;"></i><h4><%=number_with_delimiter(Org.count, delimiter: ' ')+ ' '+ _( 'Organisations') %></h4></div>
+  </div></div></p><br>
+  <p>
+      <%= raw _('You can download funder templates without logging in, but from DMPTuuli you will find tailored guidance from many research organisations, including universities and service providers like the Finnish Social Science Data Archive. Why not sign up for an account and try it out?') %>
+  </p>
+</div>

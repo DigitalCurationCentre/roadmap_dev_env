@@ -1,0 +1,42 @@
+<script>
+	$(function(){
+	  var hash = window.location.hash;
+	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
+	  $('#project-tabs .nav-tabs a').click(function (e) {
+	    $(this).tab('show');
+	    var scrollmem = $('body').scrollTop();
+	    window.location.hash = this.hash;
+	    $('html,body').scrollTop(scrollmem);
+	  });
+	});
+
+</script>
+
+
+<h1>
+	<%= _('About %{application_name}') % { application_name: ApplicationService.application_name } %>
+</h1>
+<div class="dmp_details_body">
+	<div id="my-tab-content" class="tab-content">
+		<div class="tab-pane active" id="Background">
+		  <p><%= _("Data management plan (DMP) will help you manage your data, meet funder requirements and help others use your data if shared. %{application_name} will help you write data management plans.") % { application_name: ApplicationService.application_name } %></p>
+      <p><%= raw _("%{application_name} is provided by the Finnish <a href=\'https://wiki.helsinki.fi/display/Tuuli/Tuuli-projekti\'>Tuuli project</a>.The project has worked closely with researchers and research funders to produce guidance and templates that assist researchers to produce an effective data management plan (DMP) to cater for the whole lifecycle of a project, from bid-preparation stage through to completion.") % { application_name: ApplicationService.application_name } %></p>
+		  <p><%= raw _("%{application_name} is based on <a href=\'https://dmponline.dcc.ac.uk/\'>DMPonline</a> code, developed by the UK\'s <a href=\'https://dcc.ac.uk/\'>Digital Curation Centre</a>.") % { application_name: ApplicationService.application_name } %></p>
+      <br>
+
+      <h3><%= raw _("How the tool works") %></h3>
+      <p><%= raw _("There are a number of templates within the tool that represent the requirements of different funders and institutions. Users are asked three questions at the outset so we can determine the appropriate template to display. Guidance is provided to help you interpret and answer the questions. This guidance is provided by researcher funders, universities and disciplines.") %></p>
+      <br>
+
+      <h3><%= raw _("Getting Started") %></h3>
+      <p><%= raw _("If you have an account please sign in and start creating or editing your DMP.") %></p>
+      <p><%= raw _("If you do not have a %{application_name} account, click on <a href=\'/\'>\'Create account\'</a> on the homepage.") % { application_name: ApplicationService.application_name } %></p>
+      <p><%= raw _("Please visit the <a href=\'/help\'>\'Help\'</a> page for guidance.") %></p>
+      <br>
+
+      <h3><%= _("Additional Information") %></h3>
+      <p><%= raw _("We are constantly improving the user interface and functionality of %{application_name}. If you would like to contribute with feedback and suggestions, please contact us by emailing <a href=\'mailto:%{application_email}?Subject=%{application_name} inquiry' target='_top'>%{application_email}</a>.") % { application_name: ApplicationService.application_name, application_email: Rails.configuration.x.organisation.helpdesk_email } %></p>
+		</div>
+	</div>
+</div>
