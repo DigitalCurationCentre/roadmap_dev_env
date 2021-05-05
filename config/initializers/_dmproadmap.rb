@@ -114,6 +114,9 @@ module DMPRoadmap
       }
     }
 
+    # restrict options for org selection/creation
+    config.x.application.restrict_orgs = true
+
     # ------------------- #
     # SHIBBOLETH SETTINGS #
     # ------------------- #

@@ -1,0 +1,45 @@
+<script>
+	$(function(){
+	  var hash = window.location.hash;
+	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+	
+	  $('#project-tabs .nav-tabs a').click(function (e) {
+	    $(this).tab('show');
+	    var scrollmem = $('body').scrollTop();
+	    window.location.hash = this.hash;
+	    $('html,body').scrollTop(scrollmem);
+	  });
+	});
+
+</script>
+
+
+<h1>
+	<%= _('About %{application_name}') % { :application_name => Rails.configuration.branding[:application][:name] } %>
+</h1>
+<div id="project-tabs" class="nav-project-tabs">
+	<ul class="nav nav-tabs" data-tabs="tabs">
+		<li class="active">
+            <%= link_to _('Background'), "#Background", :data => { :toggle => "tab"} %>
+        </li>
+	</ul>
+</div>
+<div class="dmp_details_body">
+	<div id="my-tab-content" class="tab-content">
+		<div class="tab-pane active" id="Background">
+			<%= raw _("<h2>Intro</h2>
+<p>Data management plan (DMP) will help you manage your data, meet funder requirements and help others use your data if shared.</p>
+<p>DMPMelbourne is provided by the University of Melbourne to produce guidance and templates that assist researchers to produce an effective data management plan (DMP) to cater for the whole lifecycle of a project, from bid-preparation stage through to completion.</p>
+<p>DMPMelbourne is based on DMPonline tool produced by the UK's Digital Curation Centre.</p><h2>How the tool works</h2>
+<p>There are a number of templates within the tool that represent the requirements of different funders and institutions. Users are asked three questions at the outset so we can determine the appropriate template to display (e.g. the ESRC template when applying for an ESRC grant). Guidance is provided to help you interpret and answer the questions. This guidance is provided by researcher funders, universities and disciplines.</p><h2>Getting Started</h2>
+<p>If you have an account please <a href='/'>sign in</a> and start creating or editing your DMP.</p>
+<p>If you do not have a %{application_name} account, click on <a href='/'>'Sign up'</a> on the homepage.</p>
+<p>Please visit the <a href='/help'>'Help'</a> page for guidance or visit the <a href='http://research.unimelb.edu.au/doing-data-better'>Doing Data Better</a> website.</p><h2>Additional Information</h2>
+<p>We are constantly improving the user interface and functionality of %{application_name}. If you would like to contribute with feedback and suggestions, please contact us by emailing <a href='mailto:dmp@lists.unimelb.edu.au?Subject=%{application_name}%%20inquiry'>dmp@lists.unimelb.edu.au</a>.</p>") % {
+				:organisation_name => Rails.configuration.branding[:organisation][:name],
+				:organisation_abbreviation => Rails.configuration.branding[:organisation][:abbreviation],
+				:application_name => Rails.configuration.branding[:application][:name],
+                                :application_url => Rails.configuration.branding[:application][:url] } %>
+		</div>	
+	</div>
+</div>	

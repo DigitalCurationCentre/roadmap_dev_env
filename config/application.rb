@@ -26,6 +26,8 @@ module DMPRoadmap
     # OVERRIDES TO DEFAULT RAILS CONFIG #
     # --------------------------------- #
 
+    config.logger = ActiveSupport::Logger.new("log/#{Rails.env}.log", "daily")
+
     config.autoload_paths += %W[#{config.root}/lib]
 
     # HTML tags that are allowed to pass through `sanitize`.
