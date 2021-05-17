@@ -9,21 +9,36 @@
         <a href="https://library.maastrichtuniversity.nl/research-support/" target="_blank"> University Library</a>, 
         <a href="https://www.maastrichtuniversity.nl/about-um/other-offices/memic" target="_blank">MEMIC Maastricht</a>, and the
         Clinical Trial Center Maastricht (<a href="http://www.ctcm.nl/English/index.php"
-        target="_blank">CTCM</a>).</p>
+        target="_blank">CTCM</a>).</p> ') % {
+          application_name: ApplicationService.application_name,
+      } %>
         <p>&nbsp;</p>
         <div style="padding-right:30px;">
           <div class="row">
             <div class="col-md-3 ">
-              <img class="img-responsive center-block" src="/images/mumc_welcome_logo.png" alt="DataHub Logo" style="max-height:50px">
+              <%= image_tag("mumc_welcome_logo.png",
+                        alt: "DataHub Logo",
+                        class: "img-responsive center-block", 
+                        style: "max-height:50px") %>
+
             </div>
             <div class="col-md-3 "  >
-              <img class="img-responsive center-block" src="/images/maas_uni_library_logo.png" alt="University Library Logo" style="max-height:50px">
+              <%= image_tag("maas_uni_library_logo.png",
+                            alt: "University Library Logo",
+                            class: "img-responsive center-block", 
+                            style: "max-height:50px") %>
             </div>
             <div class="col-md-3 "  >
-              <img class="img-responsive center-block" src="/images/memic_welcome_logo.png" alt="MEMIC Logo" style="max-height:50px">
+              <%= image_tag("memic_welcome_logo.png",
+                            alt: "MEMIC Logo",
+                            class: "img-responsive center-block", 
+                            style: "max-height:50px") %>
             </div>
             <div class="col-md-3" >
-              <img class="img-responsive center-block" src="/images/ctcm_welcome_logo.png" alt="CTCM Logo" style="max-height:50px">
+              <%= image_tag("ctcm_welcome_logo.png",
+                            alt: "CTCM Logo",
+                            class: "img-responsive center-block", 
+                            style: "max-height:50px") %>
             </div>
           </div>
         </div>
@@ -42,13 +57,6 @@
         grant providers: ZonMw and NWO. This template is constructed in accordance with two of
         the major grant providers guidelines.</p>
 
-        <p> Why not sign up and try it out?</p>') %
-        {
-          application_name: ApplicationService.application_name,
-          organisation_name: Rails.configuration.x.organisation.name
-        }
-      %>
-
-
+        <p> Why not sign up and try it out?</p>
   </p>
 </div>

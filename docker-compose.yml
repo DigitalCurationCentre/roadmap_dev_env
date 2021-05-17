@@ -20,6 +20,7 @@ services:
         #- ./config/boot.rb:/usr/src/app/config/boot.rb:cached
         # - ./config/initializers/session_store.rb:/usr/src/app/config/initializers/session_store.rb:cached
       - ./customisation/app/views/branded:/usr/src/app/app/views/branded:cached
+      - ./customisation/app/assets/images/maas_uni_library_logo.png:/usr/src/app/app/assets/images/maas_uni_library_logo.png:cached
       - ./customisation/app/assets/images/powered_by_DMP.png:/usr/src/app/app/assets/images/powered_by_DMP.png:cached
       - ./customisation/app/assets/images/delivered_by_dcc_logo.png:/usr/src/app/app/assets/images/delivered_by_dcc_logo.png:cached
       - ./customisation/app/assets/images/mumc_welcome_logo.png:/usr/src/app/app/assets/images/mumc_welcome_logo.png:cached
@@ -31,6 +32,7 @@ services:
       - ./customisation/app/assets/stylesheets/variables/_colours.scss:/usr/src/app/app/assets/stylesheets/variables/_colours.scss:cached
       - ./customisation/app/assets/stylesheets/blocks/_footers.scss:/usr/src/app/app/assets/stylesheets/blocks/_footers.scss:cached
       - ./customisation/app/assets/images/mu_logo.png:/usr/src/app/app/assets/images/mu_logo.png
+      - ./customisation/app/services/application_service.rb:/usr/src/app/app/services/application_service.rb:cached
       - ./db_backups/:/tmp/backups/:cached
       - ./scripts:/usr/src/app/scripts:cached
       - ./logs:/usr/src/app/log

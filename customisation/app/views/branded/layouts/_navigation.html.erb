@@ -67,9 +67,6 @@
           <%= render "layouts/signin_signout" %>
       </ul>
 
-      <% unless isActivePage(root_path, true) %>
-        <%= render partial: 'shared/access_controls', layout: 'shared/modal', locals: { id: "header-signin", title: _('Sign in')} %>
-      <% end %>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
