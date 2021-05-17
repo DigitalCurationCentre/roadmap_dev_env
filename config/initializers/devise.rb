@@ -2,14 +2,12 @@
 # Many of these configuration options can be set straight in your model.
 # rubocop:disable Metrics/BlockLength
 Devise.setup do |config|
-
-  #config.secret_key = Rails.application.credentials.secret_key
-  config.secret_key = ENV["SECRET_KEY"]
+  config.secret_key = Rails.application.credentials.secret_key_base
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
-  config.mailer_sender = "do-not-reply@dcc.ac.uk"
+  config.mailer_sender = "datahub@maastrichtuniversity.nl"
 
   # Configure the class responsible to send e-mails.
   # config.mailer = "Devise::Mailer"
@@ -91,8 +89,9 @@ Devise.setup do |config|
   	config.stretches = Rails.env.test? ? 1 : 10
 
   # Setup a pepper to generate the encrypted password.
-  #config.pepper = Rails.application.credentials.devise_pepper
-  config.pepper = "de451fa8d44af2c286d922f753d1b10fd23b99c10747143d9ba118988b9fa9601fea66bfe31266ffc6a331dc7331c71ebe845af8abcdb84c24b42b8063386530"
+  #config.pepper = "de451fa8d44af2c286d922f753d1b10fd23b99c10747143d9ba118988b9fa9601fea66bfe31266ffc6a331dc7331c71ebe845af8abcdb84c24b42b8063386530"
+  #config.pepper = "EXAMPLE OF PEPPER TO GENERATE THE ENCRYPTED PASSWORD"
+  config.pepper = Rails.application.credentials.devise_pepper
   
   # ==> Configuration for :invitable
   # The period the generated invitation token is valid, after
@@ -251,14 +250,13 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
-  
+
   # Any entries here MUST match a corresponding entry in the identifier_schemes table as
   # well as an identifier_schemes.schemes section in each locale file!
-  OmniAuth.config.full_host = "https://dmponline.dcc.ac.uk"
-  #OmniAuth.config.allowed_request_methods = [:post]
+  OmniAuth.config.full_host = 'https://dmp.datahubmaastricht.nl'
 
   config.omniauth :orcid,
-  'APP-JWV2MYYLT5E8TB5U',  '28155ac1-27ea-4b88-81e1-b77e9b3fedde',
+  'client_id', 'client_secret',
   {
     debug: true,
     member: false,
@@ -266,7 +264,6 @@ Devise.setup do |config|
 
   config.omniauth :shibboleth,
   {
-#    debug: true,
 #    uid_field:                 "HTTP_REMOTE_USER",
 #    shib_application_id_field: "HTTP_SHIB_APPLICATION_ID",
 #    shib_session_id_field:     "HTTP_SHIB_SESSION_ID",
@@ -279,9 +276,8 @@ Devise.setup do |config|
     },
     extra_fields: [],
     request_type: :header,
+    # debug: true,
   }
-              
-  
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
@@ -304,10 +300,10 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   config.omniauth_path_prefix = "/users/auth"
-  
+
   config.warden do |manager|
     manager.failure_app = CustomFailure
   end
-  
+
 end
 # rubocop:enable Metrics/BlockLength

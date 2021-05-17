@@ -1,0 +1,54 @@
+<div>
+  <h1><%= _('Welcome')%></h1>
+  <p>
+      <%= raw _('<p>%{application_name} helps you to create, review and share data management plans. %{application_name} is based on the DMPonline tool,
+        developed by the UK\'s Digital curation centre (DCC)
+        and the University of California Curation Center (UC3) as a shared resource for the
+        research community.  %{application_name} is hosted by <a href="https://datahub.mumc.maastrichtuniversity.nl/datahub"
+        target="_blank">DataHub Maastricht</a> and provided in collaboration with the
+        <a href="https://library.maastrichtuniversity.nl/research-support/" target="_blank"> University Library</a>, 
+        <a href="https://www.maastrichtuniversity.nl/about-um/other-offices/memic" target="_blank">MEMIC Maastricht</a>, and the
+        Clinical Trial Center Maastricht (<a href="http://www.ctcm.nl/English/index.php"
+        target="_blank">CTCM</a>).</p>
+        <p>&nbsp;</p>
+        <div style="padding-right:30px;">
+          <div class="row">
+            <div class="col-md-3 ">
+              <img class="img-responsive center-block" src="/images/mumc_welcome_logo.png" alt="DataHub Logo" style="max-height:50px">
+            </div>
+            <div class="col-md-3 "  >
+              <img class="img-responsive center-block" src="/images/maas_uni_library_logo.png" alt="University Library Logo" style="max-height:50px">
+            </div>
+            <div class="col-md-3 "  >
+              <img class="img-responsive center-block" src="/images/memic_welcome_logo.png" alt="MEMIC Logo" style="max-height:50px">
+            </div>
+            <div class="col-md-3" >
+              <img class="img-responsive center-block" src="/images/ctcm_welcome_logo.png" alt="CTCM Logo" style="max-height:50px">
+            </div>
+          </div>
+        </div>
+        <p>&nbsp;</p>
+<!--
+        <p>Some funders mandate the use of %{application_name}, while others point to it as a
+        useful option.  You can download funder templates without logging in, but the tool
+        provides tailored guidance and example answers from funders and your organisation,
+        provided by DataHub, MEMIC, CTCM.</p>
+-->
+        <p>DMPMaastricht offers a DMP template for Maastricht University/Maastricht UMC+,
+        with tailored guidance and example answers from funders and your organisation,
+        provided by the University Library, DataHub, MEMIC and CTCM.</p>
+        <p>Most of the major grant providers are implementing a new approach to data management.
+        The institutional DMP template that has been approved by two of the most common national
+        grant providers: ZonMw and NWO. This template is constructed in accordance with two of
+        the major grant providers guidelines.</p>
+
+        <p> Why not sign up and try it out?</p>') %
+        {
+          application_name: ApplicationService.application_name,
+          organisation_name: Rails.configuration.x.organisation.name
+        }
+      %>
+
+
+  </p>
+</div>

@@ -1,0 +1,73 @@
+<script>
+	$(function(){
+	  var hash = window.location.hash;
+	  hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+	
+	  $('#project-tabs .nav-tabs a').click(function (e) {
+	    $(this).tab('show');
+	    var scrollmem = $('body').scrollTop();
+	    window.location.hash = this.hash;
+	    $('html,body').scrollTop(scrollmem);
+	  });
+	});
+
+</script>
+<h2><%= _('About %{application_name}') %
+  { application_name: ApplicationService.application_name } %>
+</h2>
+<div id="project-tabs" class="nav-project-tabs">
+	<ul class="nav nav-tabs" data-tabs="tabs">
+		<li class="active">
+            <%= link_to _('Background'), "#Background", :data => { :toggle => "tab"} %>
+        </li>
+	</ul>
+</div>
+<div class="dmp_details_body">
+	<div id="my-tab-content" class="tab-content">
+		<div class="tab-pane active" id="Background">
+			<%= raw _("<h3>Intro</h3><p>Funders increasingly require their grant-holders to produce a Data Management Plan (DMP), both during the bid-preparation stage and after funding has been secured. A Data Management Plan helps you to manage data, meet funder requirements and help others use your research data if shared.</p>
+<p>%{application_name} is provided by %{organisation_name} to produce guidance and templates that assist researchers to produce an effective Data Management Plan to cater for the whole lifecycle of a project, from bid-preparation stage through to completion.</p>
+<p>%{application_name} is based on the DMPOnline tool, developed by the UK’s Digital Curation Centre (DCC) and the University of California Curation Center (UC3).</p>
+<br><h3>How the tool works</h3>
+<p>There are a number of templates within the tool that represent the requirements of different funders and institutions. When creating a new plan, users are asked a number of questions first so we can determine the appropriate template to display. Guidance is provided to help you interpret and answer the questions. This guidance is provided by funders, and research support departments within your organisation.</p>
+<br><h3>Getting Started</h3>
+<p>If you have an account please sign in and start creating or editing your DMP.</p>
+<p>If you do not have a %{application_name} account, click on <a href='/'>'Create account'</a> on the homepage.</p>
+<p>If you have a DMPonline account already and you want to transfer your DMPs to DMPMaastricht, please send an email to <a href='mailto:datahub@maastrichtuniversity.nl?Subject=%{application_name} data transfer from DMPonline' target='_top'>datahub@maastrichtuniversity.nl</a>.</p>
+<p>Please visit the <a href='/help'>'Help'</a> page for guidance.</p>
+<br><h3>Additional Information</h3>
+<p>We are constantly improving the user interface and functionality of %{application_name}. If you would like to contribute with feedback and suggestions, please contact us by emailing <a href='mailto:datahub@maastrichtuniversity.nl?Subject=%{application_name} inquiry' target='_top'>datahub@maastrichtuniversity.nl</a>.</p>") % { 
+								:organisation_name => Rails.configuration.x.organisation.name,
+								:organisation_abbreviation => Rails.configuration.x.organisation.abbreviation,
+								:application_name => ApplicationService.application_name,
+                :application_url => Rails.configuration.x.application.url } %>
+		</div>	
+		<div class="tab-pane" id="News">
+			<%= raw _('<p>%{application_name} stories from the %{organisation_abbreviation} website</p></br>') % {
+								:organisation_abbreviation => Rails.configuration.x.organisation.abbreviation,
+								:application_name => ApplicationService.application_name } %>
+            <% news_left = @dcc_news_feed.entries.count %>
+            <% @dcc_news_feed.entries.each do |entry| %>
+                <h3><%= entry.title.sanitize %></h3>
+                <% summary = entry.summary.sanitize %>
+                <% summary = summary.gsub(/\A<img([^>])+>/, "") %>
+                <% summary = summary.gsub(/\A<div([^>])+>/, "") %>
+                <% name = summary[/\A[\s\w]*([^,])/].strip %>
+                <% summary = summary.gsub(/\A.*div>/, "") %>
+                <% summary = summary.gsub(/<p>.*\z/, "") %>
+                <p><%= raw summary.strip %></p>
+                <% author = entry.author.blank? ? 'anonymous' : entry.author %>
+                <p><%= _('By ') %> <%= author %> <%= _(' on ') %> <%= entry.published.strftime("%d/%m/%Y") %></p>
+                <p><%= _('Read more on the ') %><%= link_to 'DCC Website', entry.url %></p>
+                </br>
+                <!--verify how many news are left -->
+                <%if news_left.to_i > 1 then %>
+                    <div class="two-column-clear question-divider"></div>
+                <%else%>
+                    <div class="two-column-clear"></div>
+                <%end%>
+                <% news_left = news_left - 1 %>
+            <% end %>			
+		</div>		
+	</div>
+</div>	

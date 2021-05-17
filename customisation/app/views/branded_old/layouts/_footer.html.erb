@@ -1,0 +1,24 @@
+<!-- footer container -->
+<footer class="footer">
+    <div class="left_side_footer">
+        <div class="first_row">
+                <ul class="footer-links">
+                    <li><a href="<%= contact_us_path %>"><%= _('Contact us') %></a></li>
+                    <li class="muted">|</li>
+                    <li><a href="<%= terms_path %>"><%= _('Terms of use') %></a></li>
+                </ul>
+        </div>
+        <div class="second_row">
+                <p id="dcc_link">Based on work by the <%= link_to "#{Rails.configuration.branding[:organisation][:copywrite_name]}", "#{Rails.configuration.branding[:organisation][:url]}"%>
+                </p>
+        </div>
+    </div>
+        <div class="right_side_footer">
+                <p><%= link_to( image_tag('delivered_by_dcc_logo.png', :class => 'footer_logo'), 'https://dcc.ac.uk/', :id => 'footer_right_dcc')%>
+                        <%= link_to( image_tag('powered_by_DMP.png', :class => 'footer_logo'), 'https://dmponline.dcc.ac.uk/', :id => 'footer_right_dmponline')%>
+                        </p>
+        </div>
+
+
+</footer>
+
